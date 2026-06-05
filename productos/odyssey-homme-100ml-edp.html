@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Odyssey HOMME 100ML EDP Original en Costa Rica | Matías Parfum</title>
+  <meta name="description" content="Odyssey HOMME 100ML EDP 100% original en Costa Rica. Elegí cantidad y consultá por WhatsApp con Matías Parfum." />
+
+  <link rel="canonical" href="https://matiasparfum.com/productos/odyssey-homme-100ml-edp.html">
+  <link rel="stylesheet" href="/style.css">
+
+  <meta property="og:title" content="Odyssey HOMME 100ML EDP | Matías Parfum" />
+  <meta property="og:description" content="Perfume original en Costa Rica. Elegí cantidad y consultá por WhatsApp." />
+  <meta property="og:type" content="product" />
+  <meta property="og:url" content="https://matiasparfum.com/productos/odyssey-homme-100ml-edp.html" />
+  <meta property="og:image" content="https://matiasparfum.com/img/ODYSSEYHOMME.jpg" />
+</head>
+
+<body>
+
+  <header class="topbar">
+    <a href="/index.html" class="logo">Matías Parfum</a>
+    <a class="top-cta" href="https://wa.me/50683674466">WhatsApp</a>
+  </header>
+
+  <nav class="breadcrumb">
+    <a href="/index.html">Inicio</a>
+    <span>/</span>
+    <a href="/index.html#hombre">Perfumes Hombre</a>
+    <span>/</span>
+    <a href="/index.html#odyssey">Odyssey</a>
+    <span>/</span>
+    <strong>HOMME</strong>
+  </nav>
+
+  <main class="product-page">
+
+    <section class="product-shell">
+      <div class="product-grid">
+
+        <div class="product-media">
+          <img src="/img/ODYSSEYHOMME.jpg" alt="Odyssey HOMME 100ML EDP" />
+        </div>
+
+        <div class="product-info">
+          <p class="brand">ODYSSEY</p>
+          <h1 class="product-title">HOMME 100ML EDP</h1>
+          <p class="product-desc">Perfume 100% original • Envíos en Costa Rica</p>
+
+          <p class="price" id="priceDisplay" data-price="22000">₡22.000</p>
+
+          <div class="opt-block">
+            <p class="opt-label">Tamaño</p>
+            <div class="sizes">
+              <button class="size-btn active" type="button" data-size="100 ML">100 ML</button>
+            </div>
+          </div>
+
+          <div class="qty-row">
+            <div class="qty">
+              <button type="button" class="qty-btn" id="qtyMinus">−</button>
+              <input id="qtyInput" class="qty-input" type="text" value="1" readonly />
+              <button type="button" class="qty-btn" id="qtyPlus">+</button>
+            </div>
+            <button class="btn-consultar" id="btnConsultar" type="button">CONSULTAR</button>
+          </div>
+
+          <div class="tabs">
+            <div class="tab-head">
+              <button class="tab-btn active" type="button" data-tab="desc">DESCRIPCIÓN</button>
+              <button class="tab-btn" type="button" data-tab="notes">NOTAS</button>
+            </div>
+            <div class="tab-body">
+              <div class="tab-panel active" id="tab-desc">
+                <p>Odyssey ofrece una fragancia oriental especiada de gran carácter. Con notas de Bergamota, Sándalo, Almizcle, transmite exotismo y calidez, perfecta para la noche y el clima fresco.</p>
+              </div>
+              <div class="tab-panel" id="tab-notes">
+                <ul class="info-list">
+                  <li><strong>Notas principales:</strong> Bergamota · Sándalo · Almizcle</li>
+                  <li><strong>Familia olfativa:</strong> Oriental Especiado</li>
+                  <li><strong>Intensidad:</strong> 4/5</li>
+                  <li><strong>Duración estimada:</strong> 9 horas</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <p class="backlink"><a href="/index.html">← Volver al catálogo</a></p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const qtyInput    = document.getElementById('qtyInput');
+    const priceDisplay = document.getElementById('priceDisplay');
+    const PRICE_UNIT  = parseInt(priceDisplay.dataset.price, 10);
+
+    function formatCRC(v) { return '₡' + v.toLocaleString('es-CR'); }
+    function updatePrice() {
+      priceDisplay.innerText = formatCRC(PRICE_UNIT * parseInt(qtyInput.value, 10));
+    }
+
+    document.getElementById('qtyMinus').onclick = () => {
+      qtyInput.value = Math.max(1, parseInt(qtyInput.value, 10) - 1);
+      updatePrice();
+    };
+    document.getElementById('qtyPlus').onclick = () => {
+      qtyInput.value = parseInt(qtyInput.value, 10) + 1;
+      updatePrice();
+    };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        const panel = document.getElementById('tab-' + btn.dataset.tab);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    document.getElementById('btnConsultar').onclick = () => {
+      const q     = parseInt(qtyInput.value, 10);
+      const total = PRICE_UNIT * q;
+      const size  = document.querySelector('.size-btn.active')?.dataset.size || '100 ML';
+      const msg   = 'Hola Matías, quiero consultar por Odyssey HOMME 100ML EDP.\n'
+                  + 'Tamaño: ' + size + '\nCantidad: ' + q
+                  + '\nTotal: ' + formatCRC(total);
+      window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank');
+    };
+
+    updatePrice();
+  </script>
+
+</body>
+</html>
