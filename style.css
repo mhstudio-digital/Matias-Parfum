@@ -201,33 +201,35 @@ input,select { font-family:var(--sans) }
 .stat-label { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone-dim) }
 
 .hero-visual {
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:stretch; justify-content:center;
   position:relative;
+  align-self:stretch;
 }
-.hero-bottle-wrap {
-  position:relative; width:100%; max-width:380px; margin:0 auto;
+/* Escena 3D de la botella (Three.js) — el canvas se adapta al contenedor */
+#escena-botella {
+  position:relative;
+  flex:1;
+  min-height:520px;
+  background:radial-gradient(ellipse 70% 55% at 50% 62%, #17110A 0%, rgba(10,8,6,.5) 45%, transparent 80%);
+  cursor:grab;
+  touch-action:none;
+  overflow:hidden;
 }
-.hero-glow {
-  position:absolute; inset:-20%; border-radius:50%;
-  background:radial-gradient(ellipse,rgba(201,169,110,.08) 0%,transparent 70%);
-  pointer-events:none;
+#escena-botella.arrastrando { cursor:grabbing }
+#escena-botella canvas { display:block }
+#escena-botella .pista {
+  position:absolute; bottom:28px; left:50%;
+  transform:translateX(-50%);
+  font-family:var(--serif);
+  font-size:11px; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--gold); opacity:.75;
+  transition:opacity 1.2s ease;
+  pointer-events:none; white-space:nowrap;
 }
-.hero-bottle {
-  width:100%; height:auto;
-  filter:drop-shadow(0 20px 60px rgba(201,169,110,.12));
-  animation:bottleFloat 6s ease-in-out infinite;
+#escena-botella .pista.oculta { opacity:0 }
+@media (prefers-reduced-motion:reduce) {
+  #escena-botella .pista { transition:none }
 }
-@keyframes bottleFloat {
-  0%,100% { transform:translateY(0) }
-  50%      { transform:translateY(-12px) }
-}
-.hero-deco-ring {
-  position:absolute;
-  border:1px solid var(--gold-line); border-radius:50%;
-  animation:ringPulse 4s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes ringPulse { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:.08;transform:scale(1.08)} }
 
 /* ── FILTER BAR ──────────────────────────────────────────── */
 .filter-bar {
@@ -629,8 +631,8 @@ input,select { font-family:var(--sans) }
 }
 @media (max-width:900px) {
   .hero { grid-template-columns:1fr; min-height:auto; padding-top:100px }
-  .hero-visual { order:-1; max-width:260px; margin:0 auto }
-  .hero-bottle-wrap { max-width:220px }
+  .hero-visual { order:2; width:100%; margin-top:8px }
+  #escena-botella { min-height:400px }
   .about-section { grid-template-columns:1fr; gap:40px }
   .about-rule-v { display:none }
   .footer-inner { grid-template-columns:1fr 1fr; gap:40px }
