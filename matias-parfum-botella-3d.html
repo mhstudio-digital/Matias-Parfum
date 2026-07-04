@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matías Parfum — Botella 3D</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: #060504; overflow: hidden; }
+
+  /* Contenedor de la escena: para integrarlo en tu web, copiá este div
+     y el script; la escena se adapta al tamaño del contenedor. */
+  #escena-botella {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(ellipse 70% 55% at 50% 62%, #17110a 0%, #0a0806 45%, #050403 100%);
+    cursor: grab;
+    touch-action: none;
+  }
+  #escena-botella.arrastrando { cursor: grabbing; }
+  #escena-botella canvas { display: block; }
+
+  .pista {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: #b08d4f;
+    opacity: 0.75;
+    transition: opacity 1.2s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .pista.oculta { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pista { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="escena-botella">
+  <div class="pista" id="pista">Arrastrá para rotar</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ============ CONFIG — ajustá colores acá ============ */
+  var COLOR_ORO        = 0xc9973f;
+  var COLOR_ORO_CLARO  = 0xe4c07a;
+  var COLOR_ORO_LINEA  = 0x8f6a2e;
+  var COLOR_VIDRIO     = 0x060606;
+  var VELOCIDAD_VAIVEN = 0.25;   // oscilación automática de la botella
+  var AMPLITUD_VAIVEN  = 0.22;   // radianes
+
+  var contenedor = document.getElementById('escena-botella');
+  var pista = document.getElementById('pista');
+  var reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ Renderer / escena / cámara ============ */
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(contenedor.clientWidth, contenedor.clientHeight);
+  renderer.setClearColor(0x060504, 1);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.12;
+  contenedor.appendChild(renderer.domElement);
+
+  var escena = new THREE.Scene();
+  escena.fog = new THREE.FogExp2(0x050403, 0.028);
+
+  var camara = new THREE.PerspectiveCamera(
+    34, contenedor.clientWidth / contenedor.clientHeight, 0.1, 100
+  );
+  camara.position.set(0, 2.3, 8.8);
+  camara.lookAt(0, 2.05, 0);
+
+  /* ============ Mapa de entorno (reflejos dorados) ============ */
+  function crearEntorno() {
+    var envScene = new THREE.Scene();
+    var esfera = new THREE.Mesh(
+      new THREE.SphereGeometry(60, 16, 16),
+      new THREE.MeshBasicMaterial({ color: 0x0a0805, side: THREE.BackSide })
+    );
+    envScene.add(esfera);
+
+    // franjas de luz cálida que se reflejan en el vidrio y el oro
+    var franjas = [
+      { ang: 0.7,  color: 0xcf9a45, w: 1.6, h: 16 },
+      { ang: 2.6,  color: 0x9a6f2c, w: 1.1, h: 14 },
+      { ang: 4.4,  color: 0xb98a3a, w: 1.4, h: 15 },
+      { ang: 5.6,  color: 0x6e4d1d, w: 0.9, h: 12 }
+    ];
+    franjas.forEach(function (f) {
+      var p = new THREE.Mesh(
+        new THREE.PlaneGeometry(f.w, f.h),
+        new THREE.MeshBasicMaterial({ color: f.color, side: THREE.DoubleSide })
+      );
+      p.position.set(Math.cos(f.ang) * 11, 4, Math.sin(f.ang) * 11);
+      p.lookAt(0, 3, 0);
+      envScene.add(p);
+    });
+
+    var techo = new THREE.Mesh(
+      new THREE.PlaneGeometry(14, 14),
+      new THREE.MeshBasicMaterial({ color: 0x5c3f16, side: THREE.DoubleSide })
+    );
+    techo.position.set(0, 16, 0);
+    techo.rotation.x = Math.PI / 2;
+    envScene.add(techo);
+
+    var rt = new THREE.WebGLCubeRenderTarget(128, { generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+    var cubeCam = new THREE.CubeCamera(0.1, 100, rt);
+    cubeCam.position.set(0, 3, 0);
+    cubeCam.update(renderer, envScene);
+    return rt.texture;
+  }
+  var envMap = crearEntorno();
+
+  /* ============ Materiales ============ */
+  var matVidrio = new THREE.MeshPhysicalMaterial({
+    color: COLOR_VIDRIO, metalness: 0.0, roughness: 0.08,
+    clearcoat: 1.0, clearcoatRoughness: 0.06,
+    envMap: envMap, envMapIntensity: 1.5
+  });
+  var matOro = new THREE.MeshStandardMaterial({
+    color: COLOR_ORO, metalness: 1.0, roughness: 0.22,
+    envMap: envMap, envMapIntensity: 1.35
+  });
+  var matOroBrillante = new THREE.MeshStandardMaterial({
+    color: COLOR_ORO_CLARO, metalness: 1.0, roughness: 0.14,
+    envMap: envMap, envMapIntensity: 1.5
+  });
+
+  /* ============ Utilidades de geometría ============ */
+  function formaRectRedondeado(w, h, r) {
+    var s = new THREE.Shape();
+    var x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y);
+    s.lineTo(x + w - r, y);
+    s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r);
+    s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h);
+    s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r);
+    s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  }
+
+  function cajaRedondeada(w, h, d, radio, bisel) {
+    var geo = new THREE.ExtrudeGeometry(formaRectRedondeado(w, h, radio), {
+      depth: d, bevelEnabled: true,
+      bevelThickness: bisel, bevelSize: bisel,
+      bevelSegments: 4, curveSegments: 10
+    });
+    geo.center();
+    return geo;
+  }
+
+  /* ============ Texturas por canvas ============ */
+  function textoEspaciado(ctx, texto, cx, y, espacio) {
+    var total = 0, i;
+    for (i = 0; i < texto.length; i++) {
+      total += ctx.measureText(texto[i]).width + (i < texto.length - 1 ? espacio : 0);
+    }
+    var x = cx - total / 2;
+    for (i = 0; i < texto.length; i++) {
+      ctx.fillText(texto[i], x, y);
+      x += ctx.measureText(texto[i]).width + espacio;
+    }
+  }
+
+  function crearTexturaEtiqueta() {
+    var W = 768, H = 1040;
+    var c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var ctx = c.getContext('2d');
+
+    ctx.fillStyle = '#0a0806';
+    ctx.fillRect(0, 0, W, H);
+
+    var oro = ctx.createLinearGradient(0, 0, 0, H);
+    oro.addColorStop(0, '#e8c882');
+    oro.addColorStop(0.5, '#c79b4b');
+    oro.addColorStop(1, '#e2bd74');
+
+    // doble marco
+    ctx.strokeStyle = oro;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(26, 26, W - 52, H - 52);
+    ctx.lineWidth = 1.4;
+    ctx.strokeRect(44, 44, W - 88, H - 88);
+
+    ctx.fillStyle = oro;
+    ctx.strokeStyle = oro;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+
+    var cx = W / 2;
+
+    // ---- escudo: corona ----
+    var cy = 268;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 34, 158);
+    ctx.lineTo(cx - 24, 132);
+    ctx.lineTo(cx - 12, 152);
+    ctx.lineTo(cx, 126);
+    ctx.lineTo(cx + 12, 152);
+    ctx.lineTo(cx + 24, 132);
+    ctx.lineTo(cx + 34, 158);
+    ctx.closePath();
+    ctx.stroke();
+    [-24, 0, 24].forEach(function (dx) {
+      ctx.beginPath();
+      ctx.arc(cx + dx, dx === 0 ? 118 : 124, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // ---- escudo: laureles ----
+    function laurel(lado) {
+      var r = 96;
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, Math.PI / 2 - lado * 0.12, Math.PI / 2 + lado * 1.85, lado < 0);
+      ctx.stroke();
+      for (var i = 1; i <= 8; i++) {
+        var a = Math.PI / 2 + lado * (0.25 + i * 0.19);
+        var px = cx + Math.cos(a) * r;
+        var py = cy + Math.sin(a) * r;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(a + lado * 0.9);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 13, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    laurel(1);
+    laurel(-1);
+
+    // ---- escudo: M central ----
+    ctx.textAlign = 'center';
+    ctx.font = '400 118px Georgia, "Times New Roman", serif';
+    ctx.fillText('M', cx, cy + 8);
+
+    // ---- MATÍAS ----
+    ctx.textAlign = 'left';
+    ctx.font = '400 96px Georgia, "Times New Roman", serif';
+    textoEspaciado(ctx, 'MATÍAS', cx, 545, 14);
+
+    // ---- — PARFUM — ----
+    ctx.font = '400 36px Georgia, "Times New Roman", serif';
+    textoEspaciado(ctx, 'PARFUM', cx, 632, 16);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx - 205, 632); ctx.lineTo(cx - 155, 632); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx + 155, 632); ctx.lineTo(cx + 205, 632); ctx.stroke();
+
+    // ---- pie ----
+    ctx.font = '400 27px Georgia, "Times New Roman", serif';
+    textoEspaciado(ctx, 'EXTRAIT DE PARFUM', cx, 878, 7);
+    ctx.font = '400 29px Georgia, "Times New Roman", serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('100 ml   |   3.4 fl. oz.', cx, 934);
+
+    var tex = new THREE.CanvasTexture(c);
+    tex.encoding = THREE.sRGBEncoding;
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return tex;
+  }
+
+  function crearTexturaMarmol() {
+    var S = 512;
+    var c = document.createElement('canvas');
+    c.width = S; c.height = S;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0c0a08';
+    ctx.fillRect(0, 0, S, S);
+
+    function veta(alpha, ancho, brillo) {
+      ctx.strokeStyle = 'rgba(' + (brillo ? '224,190,120' : '180,140,80') + ',' + alpha + ')';
+      ctx.lineWidth = ancho;
+      ctx.beginPath();
+      var x = Math.random() * S, y = Math.random() * S;
+      ctx.moveTo(x, y);
+      for (var i = 0; i < 4; i++) {
+        ctx.bezierCurveTo(
+          x + (Math.random() - 0.5) * 260, y + (Math.random() - 0.5) * 260,
+          x + (Math.random() - 0.5) * 260, y + (Math.random() - 0.5) * 260,
+          x += (Math.random() - 0.5) * 340, y += (Math.random() - 0.5) * 340
+        );
+      }
+      ctx.stroke();
+    }
+    for (var i = 0; i < 16; i++) veta(0.10 + Math.random() * 0.10, 1 + Math.random() * 2, false);
+    for (var j = 0; j < 6; j++) veta(0.22 + Math.random() * 0.12, 0.8 + Math.random(), true);
+
+    var tex = new THREE.CanvasTexture(c);
+    tex.encoding = THREE.sRGBEncoding;
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }
+
+  function crearSpriteSuave(colorInterior) {
+    var c = document.createElement('canvas');
+    c.width = c.height = 128;
+    var ctx = c.getContext('2d');
+    var g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, colorInterior);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* ============ Botella ============ */
+  var grupoBotella = new THREE.Group();
+  escena.add(grupoBotella);
+
+  var ALTO_PODIO = 0.55;
+
+  // cuerpo
+  var cuerpo = new THREE.Mesh(cajaRedondeada(2.05, 2.85, 0.72, 0.10, 0.05), matVidrio);
+  cuerpo.position.y = ALTO_PODIO + 2.95 / 2;
+  grupoBotella.add(cuerpo);
+
+  // etiqueta frontal
+  var etiqueta = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.5, 2.03),
+    new THREE.MeshBasicMaterial({ map: crearTexturaEtiqueta() })
+  );
+  etiqueta.material.toneMapped = false;
+  etiqueta.position.set(0, cuerpo.position.y - 0.06, 0.413);
+  grupoBotella.add(etiqueta);
+
+  // cuello dorado con anillos
+  var topeCuerpo = ALTO_PODIO + 2.95;
+  var cuello = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.30, 0.36, 48), matOro);
+  cuello.position.y = topeCuerpo + 0.18;
+  grupoBotella.add(cuello);
+
+  [topeCuerpo + 0.035, topeCuerpo + 0.33].forEach(function (y) {
+    var anillo = new THREE.Mesh(new THREE.CylinderGeometry(0.325, 0.325, 0.055, 48), matOroBrillante);
+    anillo.position.y = y;
+    grupoBotella.add(anillo);
+  });
+
+  // tapa negra con placa dorada
+  var tapa = new THREE.Mesh(cajaRedondeada(1.05, 0.52, 0.62, 0.06, 0.03), matVidrio);
+  tapa.position.y = topeCuerpo + 0.36 + 0.29;
+  grupoBotella.add(tapa);
+
+  var placa = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.028, 0.54), matOroBrillante);
+  placa.position.y = tapa.position.y + 0.29 + 0.014;
+  grupoBotella.add(placa);
+
+  /* ============ Podio de mármol ============ */
+  var matMarmol = new THREE.MeshStandardMaterial({
+    map: crearTexturaMarmol(), metalness: 0.25, roughness: 0.35,
+    envMap: envMap, envMapIntensity: 0.5
+  });
+  var podio = new THREE.Mesh(new THREE.CylinderGeometry(2.35, 2.35, ALTO_PODIO, 72), matMarmol);
+  podio.position.y = ALTO_PODIO / 2;
+  escena.add(podio);
+
+  var banda = new THREE.Mesh(new THREE.CylinderGeometry(2.375, 2.375, 0.065, 72), matOro);
+  banda.position.y = 0.05;
+  escena.add(banda);
+
+  // resplandor del piso
+  var piso = new THREE.Mesh(
+    new THREE.PlaneGeometry(26, 26),
+    new THREE.MeshBasicMaterial({
+      map: crearSpriteSuave('rgba(130,92,38,0.5)'),
+      transparent: true, depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+  );
+  piso.rotation.x = -Math.PI / 2;
+  piso.position.y = 0.005;
+  escena.add(piso);
+
+  /* ============ Arcos dorados de fondo ============ */
+  function crearArcos(radios, x, y, z) {
+    var g = new THREE.Group();
+    radios.forEach(function (r) {
+      var pts = [];
+      for (var i = 0; i <= 128; i++) {
+        var a = (i / 128) * Math.PI * 2;
+        pts.push(new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0));
+      }
+      var linea = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: COLOR_ORO_LINEA, transparent: true, opacity: 0.30 })
+      );
+      g.add(linea);
+    });
+    g.position.set(x, y, z);
+    escena.add(g);
+    return g;
+  }
+  var arcosIzq = crearArcos([3.7, 4.2, 4.7], -3.4, 3.8, -5.2);
+  var arcosDer = crearArcos([3.3, 3.8], 3.6, 2.1, -5.6);
+
+  /* ============ Humo dorado (sprites) ============ */
+  var texHumo = crearSpriteSuave('rgba(212,162,88,0.38)');
+  var humos = [];
+  [[-1.7, 1.5, -0.9, 4.4], [1.8, 2.2, -1.1, 5.0], [-1.2, 2.8, -1.3, 3.6], [1.3, 1.1, -0.7, 3.9]]
+    .forEach(function (h, i) {
+      var m = new THREE.SpriteMaterial({
+        map: texHumo, transparent: true, opacity: 0.16,
+        depthWrite: false, blending: THREE.AdditiveBlending,
+        rotation: Math.random() * Math.PI
+      });
+      var s = new THREE.Sprite(m);
+      s.position.set(h[0], h[1], h[2]);
+      s.scale.set(h[3], h[3], 1);
+      s.userData = { fase: i * 1.7, base: h[1], rotVel: (i % 2 ? 1 : -1) * 0.018 };
+      escena.add(s);
+      humos.push(s);
+    });
+
+  /* ============ Partículas doradas ============ */
+  var N = 170;
+  var posiciones = new Float32Array(N * 3);
+  var fases = new Float32Array(N);
+  var velocidades = new Float32Array(N);
+  for (var i = 0; i < N; i++) {
+    posiciones[i * 3]     = (Math.random() - 0.5) * 8;
+    posiciones[i * 3 + 1] = Math.random() * 5.5;
+    posiciones[i * 3 + 2] = (Math.random() - 0.5) * 4 - 0.5;
+    fases[i] = Math.random() * Math.PI * 2;
+    velocidades[i] = 0.06 + Math.random() * 0.14;
+  }
+  var geoParticulas = new THREE.BufferGeometry();
+  geoParticulas.setAttribute('position', new THREE.BufferAttribute(posiciones, 3));
+  var particulas = new THREE.Points(geoParticulas, new THREE.PointsMaterial({
+    size: 0.065, map: crearSpriteSuave('rgba(255,225,160,1)'),
+    color: 0xd9a860, transparent: true, opacity: 0.9,
+    depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
+  }));
+  escena.add(particulas);
+
+  /* ============ Luces ============ */
+  escena.add(new THREE.AmbientLight(0x332211, 0.55));
+
+  var luzClave = new THREE.SpotLight(0xffe6c0, 1.25, 40, 0.55, 0.6, 1.2);
+  luzClave.position.set(4.5, 8.5, 6);
+  luzClave.target.position.set(0, 2, 0);
+  escena.add(luzClave, luzClave.target);
+
+  var borde1 = new THREE.PointLight(0xd9a04a, 1.0, 22, 1.6);
+  borde1.position.set(-5.5, 3.2, -3);
+  escena.add(borde1);
+
+  var borde2 = new THREE.PointLight(0xb87f2f, 0.85, 22, 1.6);
+  borde2.position.set(5.5, 2.6, -2.5);
+  escena.add(borde2);
+
+  var frente = new THREE.PointLight(0x7a5528, 0.4, 18, 1.5);
+  frente.position.set(0, 2.2, 5.5);
+  escena.add(frente);
+
+  /* ============ Interacción: arrastrar para rotar ============ */
+  var rotUsuarioY = 0, rotUsuarioX = 0;
+  var rotActualY = 0, rotActualX = 0;
+  var amplitudVaiven = reducirMovimiento ? 0 : AMPLITUD_VAIVEN;
+  var amplitudObjetivo = amplitudVaiven;
+  var arrastrando = false, ultX = 0, ultY = 0, interactuo = false;
+  var mouseNX = 0, mouseNY = 0;
+
+  contenedor.addEventListener('pointerdown', function (e) {
+    arrastrando = true;
+    ultX = e.clientX; ultY = e.clientY;
+    amplitudObjetivo = 0;
+    contenedor.classList.add('arrastrando');
+    contenedor.setPointerCapture(e.pointerId);
+  });
+
+  contenedor.addEventListener('pointermove', function (e) {
+    var r = contenedor.getBoundingClientRect();
+    mouseNX = ((e.clientX - r.left) / r.width) * 2 - 1;
+    mouseNY = ((e.clientY - r.top) / r.height) * 2 - 1;
+    if (!arrastrando) return;
+    rotUsuarioY += (e.clientX - ultX) * 0.006;
+    rotUsuarioX += (e.clientY - ultY) * 0.003;
+    rotUsuarioX = Math.max(-0.18, Math.min(0.22, rotUsuarioX));
+    ultX = e.clientX; ultY = e.clientY;
+    if (!interactuo) {
+      interactuo = true;
+      pista.classList.add('oculta');
+    }
+  });
+
+  function soltar() {
+    arrastrando = false;
+    contenedor.classList.remove('arrastrando');
+    setTimeout(function () {
+      if (!arrastrando) amplitudObjetivo = reducirMovimiento ? 0 : AMPLITUD_VAIVEN;
+    }, 2500);
+  }
+  contenedor.addEventListener('pointerup', soltar);
+  contenedor.addEventListener('pointerleave', soltar);
+
+  setTimeout(function () { pista.classList.add('oculta'); }, 6000);
+
+  /* ============ Resize ============ */
+  window.addEventListener('resize', function () {
+    var w = contenedor.clientWidth, h = contenedor.clientHeight;
+    camara.aspect = w / h;
+    camara.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+
+  /* ============ Loop ============ */
+  var reloj = new THREE.Clock();
+
+  function animar() {
+    requestAnimationFrame(animar);
+    var t = reloj.getElapsedTime();
+
+    // vaivén automático + rotación del usuario
+    amplitudVaiven += (amplitudObjetivo - amplitudVaiven) * 0.03;
+    var vaiven = Math.sin(t * VELOCIDAD_VAIVEN) * amplitudVaiven;
+    rotActualY += (rotUsuarioY + vaiven - rotActualY) * 0.08;
+    rotActualX += (rotUsuarioX - rotActualX) * 0.08;
+    grupoBotella.rotation.y = rotActualY;
+    grupoBotella.rotation.x = rotActualX;
+
+    if (!reducirMovimiento) {
+      grupoBotella.position.y = Math.sin(t * 0.8) * 0.02;
+
+      // partículas flotando
+      var pos = geoParticulas.attributes.position.array;
+      for (var i = 0; i < N; i++) {
+        pos[i * 3 + 1] += velocidades[i] * 0.016;
+        pos[i * 3] += Math.sin(t * 0.6 + fases[i]) * 0.0012;
+        if (pos[i * 3 + 1] > 5.8) pos[i * 3 + 1] = 0.1;
+      }
+      geoParticulas.attributes.position.needsUpdate = true;
+
+      // humo a la deriva
+      humos.forEach(function (s) {
+        s.material.rotation += s.userData.rotVel * 0.016;
+        s.position.y = s.userData.base + Math.sin(t * 0.3 + s.userData.fase) * 0.25;
+        s.position.x += Math.sin(t * 0.15 + s.userData.fase) * 0.0008;
+      });
+    }
+
+    // parallax sutil de los arcos
+    arcosIzq.position.x = -3.4 - mouseNX * 0.25;
+    arcosIzq.position.y = 3.8 + mouseNY * 0.15;
+    arcosDer.position.x = 3.6 - mouseNX * 0.18;
+    arcosDer.position.y = 2.1 + mouseNY * 0.1;
+
+    renderer.render(escena, camara);
+  }
+  animar();
+})();
+</script>
+</body>
+</html>
