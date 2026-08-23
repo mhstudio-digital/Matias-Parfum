@@ -129,6 +129,13 @@
       <button class="filter-cat"        data-cat="frescos"    onclick="filtrarCategoria('frescos',this)"    aria-pressed="false">Frescos</button>
     </div>
     <div class="filter-sep" aria-hidden="true"></div>
+    <div class="filter-genders" role="group" aria-label="Género">
+      <button class="filter-gen active" data-gen="todos"  onclick="filtrarGenero('todos',this)"  aria-pressed="true">Todos</button>
+      <button class="filter-gen"        data-gen="Hombre" onclick="filtrarGenero('Hombre',this)" aria-pressed="false">Hombre</button>
+      <button class="filter-gen"        data-gen="Mujer"  onclick="filtrarGenero('Mujer',this)"  aria-pressed="false">Mujer</button>
+      <button class="filter-gen"        data-gen="Unisex" onclick="filtrarGenero('Unisex',this)" aria-pressed="false">Unisex</button>
+    </div>
+    <div class="filter-sep" aria-hidden="true"></div>
     <div class="filter-search-wrap">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="search" placeholder="Buscar fragancia…" autocomplete="off" aria-label="Buscar fragancia" oninput="filtrarBusqueda(this.value)">
@@ -3164,7 +3171,7 @@
     </div>
   </div>
 </div>
-<div class="card" data-nombre="Odyssey FEMME 80ML EDP" data-tipo="Mujer" data-brand="Odyssey" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
+<div class="card" data-nombre="Odyssey FEMME 80ML EDP" data-tipo="Unisex" data-brand="Odyssey" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
   <a href="productos/odyssey-femme-80ml-edp.html" class="card-image-wrap" aria-label="Ver Odyssey FEMME 80ML EDP">
     <img loading="lazy" src="img/FEMME.png" alt="Odyssey FEMME 80ML EDP" width="400" height="533">
     <div class="card-overlay" aria-hidden="true">
@@ -3184,7 +3191,7 @@
     </div>
   </div>
 </div>
-<div class="card" data-nombre="Odyssey CANDEE 100ML EDP" data-tipo="Mujer" data-brand="Odyssey" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
+<div class="card" data-nombre="Odyssey CANDEE 100ML EDP" data-tipo="Unisex" data-brand="Odyssey" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
   <a href="productos/odyssey-candee-100ml-edp.html" class="card-image-wrap" aria-label="Ver Odyssey CANDEE 100ML EDP">
     <img loading="lazy" src="img/CANDEE.png" alt="Odyssey CANDEE 100ML EDP" width="400" height="533">
     <div class="card-overlay" aria-hidden="true">
@@ -5213,6 +5220,7 @@ function pedirPorWhatsApp() {
 /* ─── FILTROS ────────────────────────────────────────────── */
 let filtroActivo = 'todos';
 let busquedaActiva = '';
+let generoActivo = 'todos';
 
 function _matchCat(card, cat) {
   if (cat === 'todos') return true;
@@ -5224,9 +5232,14 @@ function _matchCat(card, cat) {
   return false;
 }
 
+function _matchGenero(card, gen) {
+  if (gen === 'todos') return true;
+  return (card.dataset.tipo || '') === gen;
+}
+
 function _matchBusqueda(card, q) {
   if (!q) return true;
-  const hay = [card.dataset.nombre, card.dataset.brand, card.dataset.familia,
+  const hay = [card.dataset.nombre, card.dataset.brand, card.dataset.familia, card.dataset.tipo,
                card.querySelector('.card-notas')?.textContent].join(' ').toLowerCase();
   return hay.includes(q.toLowerCase());
 }
@@ -5235,7 +5248,7 @@ function _aplicarFiltros() {
   const cards = document.querySelectorAll('.products-grid .card');
   let visible = 0;
   cards.forEach(card => {
-    const show = _matchCat(card, filtroActivo) && _matchBusqueda(card, busquedaActiva);
+    const show = _matchCat(card, filtroActivo) && _matchGenero(card, generoActivo) && _matchBusqueda(card, busquedaActiva);
     card.style.display = show ? '' : 'none';
     if (show) visible++;
   });
@@ -5248,6 +5261,16 @@ function _aplicarFiltros() {
 function filtrarCategoria(cat, btn) {
   filtroActivo = cat;
   document.querySelectorAll('.filter-cat').forEach(b => {
+    b.classList.toggle('active', b === btn);
+    b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+  });
+  _aplicarFiltros();
+  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filtrarGenero(gen, btn) {
+  generoActivo = gen;
+  document.querySelectorAll('.filter-gen').forEach(b => {
     b.classList.toggle('active', b === btn);
     b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
   });
