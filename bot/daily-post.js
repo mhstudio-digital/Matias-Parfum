@@ -7,7 +7,7 @@
 const { getCatalog } = require("./lib/catalog");
 const { getNextUnpublished, markPublished, markFailed } = require("./lib/tracker");
 const { generateImage, generateCaption } = require("./lib/ai");
-const { publishToInstagram, getBestTimeToday } = require("./lib/instagram");
+const { publishToInstagram, nowInCostaRica } = require("./lib/instagram");
 const { notify, notifyError } = require("./lib/notify");
 
 async function main() {
@@ -17,17 +17,17 @@ async function main() {
   const product = getNextUnpublished(catalog);
 
   try {
-    const [imageUrl, caption, publishAt] = await Promise.all([
+    const [imageUrl, caption] = await Promise.all([
       generateImage(product),
       generateCaption(product),
-      getBestTimeToday(),
     ]);
 
     const postId = await publishToInstagram({ imageUrl, caption });
+    const publishedAt = nowInCostaRica();
 
     markPublished(product, postId);
 
-    await notify(product, publishAt);
+    await notify(product, publishedAt);
 
     console.log(`Publicado: ${product.slug} (post ${postId})`);
   } catch (err) {
