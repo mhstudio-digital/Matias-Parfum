@@ -8,8 +8,8 @@ Regla aplicada: en cada conflicto se usó el valor de la página de producto (co
 
 | slug | campo | valor en card | valor en página | usado |
 |---|---|---|---|---|
-| odyssey-candee-100ml-edp | genero | "Unisex" | "Mujer" | "Mujer" |
 | odyssey-femme-80ml-edp | genero | "Unisex" | "Mujer" | "Mujer" |
+| odyssey-candee-100ml-edp | genero | "Unisex" | "Mujer" | "Mujer" |
 
 ## ⚠ Marca placeholder, no un mismatch entre fuentes (43)
 
@@ -22,6 +22,31 @@ adivinó la marca real — para que se corrija a mano en productos.json revisand
 
 | slug | marca actual | nombreCompleto (pista de la marca real) |
 |---|---|---|
+| dolce-gabbana-light-blue-100ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE 100ML EDT" |
+| dolce-gabbana-light-blue-200ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE 200ML EDT" |
+| dolce-gabbana-the-one-150ml-edt | Otra | "DOLCE & GABBANA THE ONE 150ML EDT" |
+| dolce-gabbana-light-blue-love-is-love-125ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE LOVE IS LOVE 125ML EDT" |
+| dolce-gabbana-light-blue-summer-vibes-125ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE SUMMER VIBES 125ML EDT" |
+| dolce-gabbana-intenso-125ml-edp | Otra | "DOLCE & GABBANA INTENSO 125ML EDP" |
+| dolce-gabbana-king-100ml-edt | Otra | "DOLCE & GABBANA KING 100ML EDT" |
+| dolce-gabbana-king-100ml-edp | Otra | "DOLCE & GABBANA KING 100ML EDP" |
+| dolce-gabbana-the-one-gold-100ml-edp-intense | Otra | "DOLCE & GABBANA THE ONE GOLD 100ML EDP INTENSE" |
+| hawas-for-him-100ml-edp | Otra | "HAWAS FOR HIM 100ML EDP" |
+| moschino-toy-2-bubble-gum-100ml-edp | Otra | "MOSCHINO TOY 2 BUBBLE GUM 100ML EDP" |
+| moschino-toy-2-100ml-edp-version-tester | Otra | "MOSCHINO TOY 2 100ML EDP VERSION TESTER" |
+| moschino-fresh-couture-100ml-edt | Otra | "MOSCHINO FRESH COUTURE 100ML EDT" |
+| moschino-pink-fresh-couture-100ml-edt | Otra | "MOSCHINO PINK FRESH COUTURE 100ML EDT" |
+| moschino-fresh-gold-couture-100ml-edp | Otra | "MOSCHINO FRESH GOLD COUTURE 100ML EDP" |
+| rave-now-intense-100ml-edp | Otra | "RAVE NOW INTENSE 100ML EDP" |
+| rave-now-rouge-100ml-edp | Otra | "RAVE NOW ROUGE 100ML EDP" |
+| rave-now-white-100ml-edp | Otra | "RAVE NOW WHITE 100ML EDP" |
+| maison-alhambra-bright-peach-80ml-edp | Otra | "MAISON ALHAMBRA BRIGHT PEACH 80ML EDP" |
+| maison-alhambra-porto-neroli-80ml-edp | Otra | "MAISON ALHAMBRA PORTO NEROLI 80ML EDP" |
+| maison-alhambra-toscano-leather-80ml-edp | Otra | "MAISON ALHAMBRA TOSCANO LEATHER 80ML EDP" |
+| maison-alhambra-woody-oud-80ml-edp | Oud | "MAISON ALHAMBRA WOODY OUD 80ML EDP" |
+| maison-alhambra-hercules-100ml-edp | Otra | "MAISON ALHAMBRA HERCULES 100ML EDP" |
+| maison-alhambra-la-rouge-baroque-540-100ml-edp | Otra | "MAISON ALHAMBRA LA ROUGE BAROQUE 540 100ML EDP" |
+| moschino-toy-2-pearl-100ml-edp | Otra | "MOSCHINO TOY 2 PEARL 100ML EDP" |
 | afnan-9am-dive-100ml-edp | Otra | "AFNAN 9AM DIVE 100ML EDP" |
 | afnan-9pm-rebel-100ml-edp | Otra | "AFNAN 9PM REBEL 100ML EDP" |
 | afnan-supremacy-gold-100ml-edp | Otra | "AFNAN SUPREMACY GOLD 100ML EDP" |
@@ -38,33 +63,8 @@ adivinó la marca real — para que se corrija a mano en productos.json revisand
 | armaf-club-de-nuit-untold-105ml-edp | Otra | "ARMAF CLUB DE NUIT UNTOLD 105ML EDP" |
 | armaf-island-breeze-100ml-edp | Otra | "ARMAF ISLAND BREEZE 100ML EDP" |
 | armaf-ventana-marine-100ml-edp | Otra | "ARMAF VENTANA MARINE 100ML EDP" |
-| dolce-gabbana-intenso-125ml-edp | Otra | "DOLCE & GABBANA INTENSO 125ML EDP" |
-| dolce-gabbana-king-100ml-edp | Otra | "DOLCE & GABBANA KING 100ML EDP" |
-| dolce-gabbana-king-100ml-edt | Otra | "DOLCE & GABBANA KING 100ML EDT" |
-| dolce-gabbana-light-blue-100ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE 100ML EDT" |
-| dolce-gabbana-light-blue-200ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE 200ML EDT" |
-| dolce-gabbana-light-blue-love-is-love-125ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE LOVE IS LOVE 125ML EDT" |
-| dolce-gabbana-light-blue-summer-vibes-125ml-edt | Otra | "DOLCE & GABBANA LIGHT BLUE SUMMER VIBES 125ML EDT" |
-| dolce-gabbana-the-one-150ml-edt | Otra | "DOLCE & GABBANA THE ONE 150ML EDT" |
-| dolce-gabbana-the-one-gold-100ml-edp-intense | Otra | "DOLCE & GABBANA THE ONE GOLD 100ML EDP INTENSE" |
 | emper-le-chameu-stallion-53-100ml-edp | Otra | "EMPER LE CHAMEU STALLION 53 100ML EDP" |
-| hawas-for-him-100ml-edp | Otra | "HAWAS FOR HIM 100ML EDP" |
 | jo-milano-paris-game-of-spades-wildcard-100ml-parfum | Otra | "JO MILANO PARIS GAME OF SPADES WILDCARD 100ML PARFUM" |
-| maison-alhambra-bright-peach-80ml-edp | Otra | "MAISON ALHAMBRA BRIGHT PEACH 80ML EDP" |
-| maison-alhambra-hercules-100ml-edp | Otra | "MAISON ALHAMBRA HERCULES 100ML EDP" |
-| maison-alhambra-la-rouge-baroque-540-100ml-edp | Otra | "MAISON ALHAMBRA LA ROUGE BAROQUE 540 100ML EDP" |
-| maison-alhambra-porto-neroli-80ml-edp | Otra | "MAISON ALHAMBRA PORTO NEROLI 80ML EDP" |
-| maison-alhambra-toscano-leather-80ml-edp | Otra | "MAISON ALHAMBRA TOSCANO LEATHER 80ML EDP" |
-| maison-alhambra-woody-oud-80ml-edp | Oud | "MAISON ALHAMBRA WOODY OUD 80ML EDP" |
-| moschino-fresh-couture-100ml-edt | Otra | "MOSCHINO FRESH COUTURE 100ML EDT" |
-| moschino-fresh-gold-couture-100ml-edp | Otra | "MOSCHINO FRESH GOLD COUTURE 100ML EDP" |
-| moschino-pink-fresh-couture-100ml-edt | Otra | "MOSCHINO PINK FRESH COUTURE 100ML EDT" |
-| moschino-toy-2-100ml-edp-version-tester | Otra | "MOSCHINO TOY 2 100ML EDP VERSION TESTER" |
-| moschino-toy-2-bubble-gum-100ml-edp | Otra | "MOSCHINO TOY 2 BUBBLE GUM 100ML EDP" |
-| moschino-toy-2-pearl-100ml-edp | Otra | "MOSCHINO TOY 2 PEARL 100ML EDP" |
-| rave-now-intense-100ml-edp | Otra | "RAVE NOW INTENSE 100ML EDP" |
-| rave-now-rouge-100ml-edp | Otra | "RAVE NOW ROUGE 100ML EDP" |
-| rave-now-white-100ml-edp | Otra | "RAVE NOW WHITE 100ML EDP" |
 
 ## Sin nombre de línea de producto en ninguna fuente (2)
 
@@ -74,8 +74,8 @@ queda `null` en productos.json. El nombre del archivo de imagen se lista solo co
 
 | slug | marca | nombreCompleto (texto crudo de la página) | imagen (pista) |
 |---|---|---|---|
-| paco-rabanne-100ml-edt | Paco Rabanne | "100ML EDT" | img/Rabanne PACO .png |
 | tommy-hilfiger-100ml-edt | Tommy Hilfiger | "100ML EDT" | img/TOMMYNOW.png |
+| paco-rabanne-100ml-edt | Paco Rabanne | "100ML EDT" | img/Rabanne PACO .png |
 
 ## Campos no derivables automáticamente (4)
 
@@ -83,7 +83,7 @@ No se inventó ningún valor: donde el texto fuente no permitía derivar el dato
 
 | slug | tamaño | concentracion | categoria | precio |
 |---|---|---|---|---|
-| carolina-herrera-212-sexy-men-100ml | 100ml | null | florales | 41000 |
-| jean-paul-gaultier-le-beau-edt | null | EDT | orientales | 55000 |
 | jean-paul-gaultier-le-beau-le-parfum | null | PARFUM | orientales | 65000 |
+| jean-paul-gaultier-le-beau-edt | null | EDT | orientales | 55000 |
 | paco-rabanne-one-million-edt | null | EDT | amaderados | 46000 |
+| carolina-herrera-212-sexy-men-100ml | 100ml | null | florales | 41000 |

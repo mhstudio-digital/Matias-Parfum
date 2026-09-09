@@ -127,7 +127,7 @@
   document.getElementById('qtyPlus').onclick  = () => { qty++; render(); };
 
   document.getElementById('btnWa').onclick = () => {
-    const msg = 'Hola Matías, quiero consultar por <%- p.nombreCompleto %>.\n'
+    const msg = 'Hola Matías, quiero consultar por <%- p.tituloCard %>.\n'
               + 'Tamaño: <%- p.sizeParaMensaje %> ML\nCantidad: ' + qty
               + '\nTotal: ' + fmt(PRICE * qty);
     window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank');

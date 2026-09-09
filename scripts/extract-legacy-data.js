@@ -117,12 +117,20 @@ function parsePage(file) {
   const imgMatch = html.match(/<img class="pp-img"[^>]*src="([^"]+)"/);
 
   const breadcrumbGenero = (html.match(/href="\/index\.html#(\w+)"/) || [])[1] || null;
-  const breadcrumbMarca = (html.match(/<span>\/?<\/span>\s*<span>([^<]+)<\/span>\s*<span class="sep"[^>]*>\/<\/span>\s*<span>[^<]+<\/span>\s*<\/nav>/) || [])[1] || null;
+  // El generador original del sitio arma el último segmento del breadcrumb
+  // (marca+nombre sin tamaño/concentración) con una lógica inconsistente entre
+  // productos (a veces recorta "PARFUM"/"ELIXIR", a veces no, sin un patrón
+  // único). En vez de adivinar esa lógica, se extrae el texto YA EXISTENTE en
+  // cada página tal cual está — fidelidad real en lugar de una fórmula inventada.
+  const breadcrumbNav = (html.match(/<nav class="pp-bread"[\s\S]*?<\/nav>/) || [])[0] || '';
+  const breadcrumbSpans = [...breadcrumbNav.matchAll(/<span>([^<]*)<\/span>/g)].map(m => m[1]);
+  const breadcrumbFinal = breadcrumbSpans.length ? breadcrumbSpans[breadcrumbSpans.length - 1] : null;
 
   return {
     slug, title, canonical, jsonLd, ppBrand, ppTitle, genero, familiaTag,
     precio, pills, intensidad, duracionTxt, familiaSpec,
     img: imgMatch ? imgMatch[1] : null,
+    breadcrumbFinal,
   };
 }
 
@@ -213,11 +221,13 @@ const conflictos = [];
 const sinCard = [];
 const sinPagina = [];
 
-for (const file of productFiles) {
-  const slug = file.replace(/\.html$/, '');
+// Se recorre en el ORDEN de las cards de index.html (no alfabético de
+// productos/), para que productos.json — y por lo tanto el sitio generado —
+// preserve el orden de catálogo curado a mano que tiene hoy el sitio.
+for (const card of cardsData) {
+  const slug = card.slug;
   const page = pagesBySlug.get(slug);
-  const card = cardsBySlug.get(slug);
-  if (!card) { sinCard.push(slug); continue; }
+  if (!page) { sinPagina.push(slug); continue; }
 
   // --- marca: prioriza JSON-LD (más limpio), fallback a card ---
   const marca = (page.jsonLd && page.jsonLd.brand && page.jsonLd.brand.name) || card.data_brand;
@@ -303,11 +313,13 @@ for (const file of productFiles) {
   }
 
   const descripcion = (page.jsonLd && page.jsonLd.description) || null;
+  const breadcrumbFinal = page.breadcrumbFinal ? page.breadcrumbFinal.replace(/&amp;/g, '&') : null;
 
   crudos.push({
     slug,
     nombreCompleto,
     tituloCard,
+    breadcrumbFinal,
     marca,
     genero,
     familia,
@@ -322,8 +334,9 @@ for (const file of productFiles) {
   });
 }
 
-for (const c of cardsData) {
-  if (!pagesBySlug.has(c.slug)) sinPagina.push(c.slug);
+for (const file of productFiles) {
+  const slug = file.replace(/\.html$/, '');
+  if (!cardsBySlug.has(slug)) sinCard.push(slug);
 }
 
 // ---------- 6b) Pasada 2: frecuencia de "palabra-previa + marca" para saber
@@ -346,6 +359,7 @@ const productos = crudos.map(c => {
     nombre,
     nombreCompleto: c.nombreCompleto,
     tituloCard: c.tituloCard,
+    breadcrumbFinal: c.breadcrumbFinal,
     marca: c.marca,
     genero: c.genero,
     familia: c.familia,
