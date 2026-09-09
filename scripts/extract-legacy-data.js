@@ -74,6 +74,7 @@ const cardsData = cardBlocks.map(block => {
     familia_visible: familiaSpan ? familiaSpan[1].trim() : null,
     notas: notasSpan ? notasSpan[1].split('·').map(s => s.trim()).filter(Boolean) : [],
     precio: precioP ? precioP[1].trim() : null,
+    precioDesde: precioP ? /^Desde\s/.test(precioP[1].trim()) : false,
   };
 });
 
@@ -249,6 +250,7 @@ for (const file of productFiles) {
     conflictos.push({ slug, campo: 'precio', card: precioCardNum, pagina: page.precio, usado: page.precio });
   }
   const precio = (page.precio != null ? page.precio : precioCardNum);
+  const precioDesde = !!card.precioDesde; // p.ej. "Desde ₡46,000": el precio cubre varias presentaciones bajo una sola card
 
   // --- notas: pagina (pills) vs card (card-notas) ---
   const notasPagina = page.pills || [];
@@ -289,6 +291,11 @@ for (const file of productFiles) {
   // incluye (es una convención de cada plantilla, no un conflicto de datos).
   // Por eso comparamos ambos ya sin marca antes de decidir si hay un conflicto real.
   const nombreCompleto = page.ppTitle || card.data_nombre;
+  // Texto EXACTO que usa hoy la card de index.html (data-nombre, alt, aria-label,
+  // texto del título y el argumento de consultarPerfume): título/mayúsculas
+  // inconsistentes por ser carga manual histórica, no se normaliza — se preserva
+  // tal cual para poder regenerar la card sin perder ni alterar texto visible.
+  const tituloCard = card.data_nombre;
   const cardNombreComparable = normalizar((card.data_nombre || '').replace(new RegExp('^' + (marca || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), '').trim());
   const paginaNombreComparable = normalizar(page.ppTitle || '');
   if (card.data_nombre && page.ppTitle && cardNombreComparable !== paginaNombreComparable) {
@@ -300,11 +307,13 @@ for (const file of productFiles) {
   crudos.push({
     slug,
     nombreCompleto,
+    tituloCard,
     marca,
     genero,
     familia,
     categoria,
     precio,
+    precioDesde,
     imagen,
     notas,
     intensidad,
@@ -336,6 +345,7 @@ const productos = crudos.map(c => {
     slug: c.slug,
     nombre,
     nombreCompleto: c.nombreCompleto,
+    tituloCard: c.tituloCard,
     marca: c.marca,
     genero: c.genero,
     familia: c.familia,
@@ -343,6 +353,7 @@ const productos = crudos.map(c => {
     'tamaño': tamano,
     concentracion,
     precio: c.precio,
+    precioDesde: c.precioDesde,
     imagen: c.imagen,
     notas: c.notas,
     intensidad: c.intensidad,
