@@ -1,0 +1,39 @@
+name: Publicación diaria en Instagram
+
+on:
+  schedule:
+    # 15:00 UTC = 9:00 AM Costa Rica, todos los días
+    - cron: "0 15 * * *"
+  workflow_dispatch: {} # permite dispararlo a mano desde la pestaña "Actions" para probar
+
+permissions:
+  contents: write # necesario para poder commitear bot/published.json actualizado
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Correr el bot
+        env:
+          METRICOOL_API_KEY: ${{ secrets.METRICOOL_API_KEY }}
+          METRICOOL_USER_ID: ${{ secrets.METRICOOL_USER_ID }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node bot/daily-post.js
+
+      - name: Guardar el tracking actualizado
+        run: |
+          git config user.name "matias-parfum-bot"
+          git config user.email "bot@matiasparfum.com"
+          git add bot/published.json
+          git diff --staged --quiet || git commit -m "bot: registrar publicación automática"
+          git push
