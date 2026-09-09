@@ -1,12 +1,13 @@
 // bot/daily-post.js
 //
 // Corrido por GitHub Actions una vez al día (ver .github/workflows/daily-post.yml).
-// No depende de Vercel, Firebase, ni de este chat — corre 100% solo dentro del repo.
+// No depende de Vercel, Firebase, Metricool, ni de este chat — corre 100%
+// solo dentro del repo, publicando directo a Instagram vía la API de Meta.
 
 const { getCatalog } = require("./lib/catalog");
 const { getNextUnpublished, markPublished, markFailed } = require("./lib/tracker");
 const { generateImage, generateCaption } = require("./lib/ai");
-const { publishToInstagram, getBestTimeToday } = require("./lib/metricool");
+const { publishToInstagram, getBestTimeToday } = require("./lib/instagram");
 const { notify, notifyError } = require("./lib/notify");
 
 async function main() {
@@ -22,7 +23,7 @@ async function main() {
       getBestTimeToday(),
     ]);
 
-    const postId = await publishToInstagram({ imageUrl, caption, publishAt });
+    const postId = await publishToInstagram({ imageUrl, caption });
 
     markPublished(product, postId);
 
