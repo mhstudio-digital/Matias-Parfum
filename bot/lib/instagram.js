@@ -13,6 +13,11 @@
 //   - El "Instagram Business Account ID" (se obtiene desde la Página
 //     de Facebook vinculada, vía Graph API Explorer o el propio setup
 //     de la app).
+//
+// Nota: a diferencia de Metricool, esta API publica DE INMEDIATO cuando
+// se llama — no programa para más tarde. El cron de GitHub Actions ya
+// corre a la hora deseada (9am Costa Rica), así que no hace falta lógica
+// de "mejor horario" acá.
 
 const GRAPH_API_VERSION = "v21.0";
 const GRAPH_BASE = `https://graph.facebook.com/${GRAPH_API_VERSION}`;
@@ -63,14 +68,12 @@ async function publishToInstagram({ imageUrl, caption }) {
 }
 
 /**
- * Reemplaza al "mejor horario" que daba Metricool. Sin esa analítica,
- * usamos una hora fija razonable (mediodía Costa Rica), que en los datos
- * que vimos antes estaba entre las mejores franjas del día.
+ * Hora real de publicación, en zona horaria de Costa Rica — usada solo
+ * para el texto del aviso de WhatsApp (la publicación en sí ya ocurrió
+ * de inmediato en publishToInstagram).
  */
-async function getBestTimeToday() {
-  const now = new Date();
-  now.setHours(12, 0, 0, 0);
-  return now;
+function nowInCostaRica() {
+  return new Date(new Date().toLocaleString("en-US", { timeZone: "America/Costa_Rica" }));
 }
 
-module.exports = { publishToInstagram, getBestTimeToday };
+module.exports = { publishToInstagram, nowInCostaRica };
