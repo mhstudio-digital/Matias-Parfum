@@ -1,35 +1,117 @@
 /*
- * MATÍAS PARFUM — Dark Luxury 2026
- * Cormorant Garamond (títulos) + DM Sans (cuerpo)
- * Fondo #0C0B09 · Oro #C9A96E · Crema #EDE8DF
+ * MATÍAS PARFUM — Boutique de Reserva v2 (Fase A: sistema de diseño)
+ * Referencia: Jo Malone London. Playfair Display (títulos) + Inter (cuerpo)
+ * Fondo #F5F1EA · Dorado #B8935A · Negro suave #1C1712
+ * Ver docs/design-system.md para la especificación completa.
+ *
+ * IMPORTANTE (Fase B, todavía no hecho): reemplazar en el <head> de
+ * index.html y templates/producto.ejs el <link> de Google Fonts de
+ * Cormorant Garamond + DM Sans por:
+ *
+ *   <link rel="preconnect" href="https://fonts.googleapis.com">
+ *   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
  */
 
 /* ── TOKENS ─────────────────────────────────────────────── */
 :root {
-  --bg:        #0C0B09;
-  --bg2:       #0F0E0C;
-  --bg3:       #141210;
-  --bg4:       #1A1814;
-  --gold:      #C9A96E;
-  --gold-lt:   #E2C99A;
-  --gold-dim:  rgba(201,169,110,.10);
-  --gold-line: rgba(201,169,110,.22);
-  --gold-glow: rgba(201,169,110,.35);
-  --cream:     #EDE8DF;
-  --stone:     #C4B9A8;
-  --stone-dim: rgba(196,185,168,.48);
-  --line:      rgba(201,169,110,.18);
-  --wa:        #25D366;
+  /* Color — superficies */
+  --color-bg:            #F5F1EA;
+  --color-bg-alt:        #FBF9F5;
+  --color-surface:       #FFFFFF;
+  --color-surface-2:     #EFE8DA;
+  --color-overlay:       rgba(26,22,15,.55);
 
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans:  'DM Sans', system-ui, sans-serif;
+  /* Color — texto */
+  --color-text-primary:   #1C1712;
+  --color-text-secondary: #6B6255;
+  --color-text-muted:     #A79C8A;
+  --color-text-inverse:   #F5F1EA;
 
+  /* Color — acento */
+  --color-accent:          #B8935A;
+  --color-accent-dark:     #8F6F42;
+  --color-accent-light:    #E4D3B4;
+  --color-accent-burgundy: #6B2737;
+
+  /* Color — bordes y funcionales */
+  --color-border:        #E2DACB;
+  --color-border-strong: #C9BEA8;
+  --color-whatsapp:      #25D366;
+  --color-error:         #B23A2E;
+
+  /* Tipografía */
+  --font-serif: 'Playfair Display', 'Times New Roman', serif;
+  --font-sans:  'Inter', -apple-system, system-ui, sans-serif;
+
+  --text-h1:       clamp(2.75rem, 2.1rem + 3vw, 4.5rem);
+  --text-h2:       clamp(2.1rem, 1.7rem + 2vw, 3rem);
+  --text-h3:       clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --text-h4:       clamp(1.2rem, 1.1rem + .4vw, 1.4rem);
+  --text-h5:       1.05rem;
+  --text-h6:       .85rem;
+  --text-body:     .95rem;
+  --text-body-sm:  .85rem;
+  --text-caption:  .7rem;
+
+  --tracking-h6:      .12em;
+  --tracking-caption: .16em;
+
+  /* Espaciado (escala de 8px) */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+
+  /* Radios */
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-lg:   10px;
+  --radius-pill: 999px;
+
+  /* Sombras (tinte cálido) */
+  --shadow-sm: 0 1px 2px rgba(28,23,15,.06);
+  --shadow-md: 0 8px 24px rgba(28,23,15,.08);
+  --shadow-lg: 0 24px 48px rgba(28,23,15,.12);
+
+  /* Motion y layout (sin cambios respecto al sistema anterior) */
   --ease:  cubic-bezier(.16,1,.3,1);
   --ease2: cubic-bezier(.4,0,.2,1);
+  --max:   1340px;
+  --pad:   clamp(20px,5vw,60px);
 
-  --max:  1340px;
-  --pad:  clamp(20px,5vw,60px);
-  --r:    2px;
+  /* ── Alias legado — Fase A→B ──────────────────────────────
+     Los componentes existentes (.navbar, .card, .pp-*, etc.) todavía
+     están escritos contra estos nombres viejos. Se mantienen como alias
+     a los tokens semánticos nuevos para que el sitio no se rompa por
+     variables indefinidas mientras se migra en la Fase B. Ver
+     docs/design-system.md §7. Eliminar cuando ya no quede ningún
+     var(--gold) / var(--bg) / etc. fuera de esta lista. */
+  --bg:        var(--color-bg);
+  --bg2:       var(--color-bg-alt);
+  --bg3:       var(--color-surface-2);
+  --bg4:       var(--color-surface);
+  --gold:      var(--color-accent);
+  --gold-lt:   var(--color-accent-light);
+  --gold-dim:  rgba(184,147,90,.10);
+  --gold-line: rgba(184,147,90,.28);
+  --gold-glow: rgba(184,147,90,.35);
+  --cream:     var(--color-text-inverse);
+  --stone:     var(--color-text-secondary);
+  --stone-dim: rgba(107,98,85,.55);
+  --line:      var(--color-border);
+  --wa:        var(--color-whatsapp);
+
+  --serif: var(--font-serif);
+  --sans:  var(--font-sans);
+
+  --r:    var(--radius-sm);
 }
 
 /* ── RESET ───────────────────────────────────────────────── */
