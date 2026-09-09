@@ -7,7 +7,7 @@ const { getCatalog } = require("./lib/catalog");
 const { getNextUnpublished, markPublished, markFailed } = require("./lib/tracker");
 const { generateImage, generateCaption } = require("./lib/ai");
 const { publishToInstagram, getBestTimeToday } = require("./lib/metricool");
-const { notify } = require("./lib/notify");
+const { notify, notifyError } = require("./lib/notify");
 
 async function main() {
   const catalog = getCatalog();
@@ -26,19 +26,12 @@ async function main() {
 
     markPublished(product, postId);
 
-    await notify(
-      `✅ Se publicó automáticamente:\n<b>${product.name}</b>\n₡${product.priceCRC.toLocaleString(
-        "es-CR"
-      )}\n\nProgramado para las ${publishAt.toLocaleTimeString("es-CR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })}`
-    );
+    await notify(product, publishAt);
 
     console.log(`Publicado: ${product.slug} (post ${postId})`);
   } catch (err) {
     markFailed(product, err.message);
-    await notify(`❌ Falló la publicación automática de <b>${product.name}</b>:\n${err.message}`);
+    await notifyError(product, err.message);
     console.error("Error en daily-post:", err);
     process.exit(1);
   }
