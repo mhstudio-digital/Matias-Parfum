@@ -503,7 +503,55 @@
     "duracion": "8 horas",
     "descripcion": "PACO RABANNE POUR HOMME 100ML EDT 100% original en Costa Rica. Familia Amaderado."
   },
+    {
+    "slug": "paco-rabanne-phantom-in-red-100ml-parfum",
+    "nombre": "PHANTOM IN RED",
+    "nombreCompleto": "PHANTOM IN RED 100ML PARFUM ELIXIR",
+    "tituloCard": "PACO RABANNE PHANTOM IN RED 100ML PARFUM",
+    "breadcrumbFinal": "PHANTOM IN RED",
+    "marca": "Paco Rabanne",
+    "genero": "hombre",
+    "familia": "Ambarado",
+    "categoria": "orientales",
+    "tamaño": "100ml",
+    "concentracion": "PARFUM",
+    "precio": 64000,
+    "precioDesde": false,
+    "imagen": "img/PACO RABANNE PHANTOM IN RED 100ML PARFUM.jpg",
+    "notas": [
+      "Lavanda",
+      "Azafrán",
+      "Benjuí"
+    ],
+    "intensidad": 5,
+    "duracion": "10 horas",
+    "descripcion": "PACO RABANNE PHANTOM IN RED 100ML PARFUM 100% original en Costa Rica. Familia Ambarado."
+  },
   {
+    "slug": "paco-rabanne-fame-in-love-80ml-parfum",
+    "nombre": "FAME IN LOVE",
+    "nombreCompleto": "FAME IN LOVE 80ML PARFUM ELIXIR",
+    "tituloCard": "PACO RABANNE FAME IN LOVE 80ML PARFUM",
+    "breadcrumbFinal": "FAME IN LOVE",
+    "marca": "Paco Rabanne",
+    "genero": "mujer",
+    "familia": "Oriental Floral",
+    "categoria": "florales",
+    "tamaño": "80ml",
+    "concentracion": "PARFUM",
+    "precio": 67000,
+    "precioDesde": false,
+    "imagen": "img/PACO RABANNE FAME IN LOVE 80ML PARFUM.jpg",
+    "notas": [
+      "Fresa",
+      "Jazmín",
+      "Vainilla"
+    ],
+    "intensidad": 4,
+    "duracion": "8 horas",
+    "descripcion": "PACO RABANNE FAME IN LOVE 80ML PARFUM 100% original en Costa Rica. Familia Oriental Floral."
+  },
+{
     "slug": "valentino-uomo-born-in-roma-intense-100ml-edp",
     "nombre": "UOMO BORN IN ROMA INTENSE",
     "nombreCompleto": "UOMO BORN IN ROMA INTENSE 100ML EDP",
