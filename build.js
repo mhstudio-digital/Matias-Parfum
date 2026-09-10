@@ -27,6 +27,7 @@ const DESTACADOS_SLUGS = [
 const NUEVOS_INGRESOS_SLUGS = [
   'paco-rabanne-phantom-in-red-100ml-parfum',
   'paco-rabanne-fame-in-love-80ml-parfum',
+  'versace-dylan-blush-pink-100ml-edp',
 ];
 
 const cardTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'card.ejs'), 'utf8');
