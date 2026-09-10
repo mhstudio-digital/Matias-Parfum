@@ -1,14 +1,20 @@
 // bot/daily-post.js
 //
 // Corrido por GitHub Actions una vez al día (ver .github/workflows/daily-post.yml).
-// No depende de Vercel, Firebase, Metricool, ni de este chat — corre 100%
-// solo dentro del repo, publicando directo a Instagram vía la API de Meta.
+//
+// Versión actual: el bot NO publica solo — genera el post (foto real del
+// catálogo + caption con IA) y te lo manda por correo (Gmail), listo para
+// que lo subas vos mismo a Instagram. Esto evita depender de la
+// verificación de Meta mientras se resuelve.
+//
+// Para volver a publicación 100% automática más adelante: cambiar el
+// require de "./lib/email" por "./lib/instagram" + "./lib/notify"
+// (el código de esos dos ya está listo en el repo).
 
 const { getCatalog } = require("./lib/catalog");
 const { getNextUnpublished, markPublished, markFailed } = require("./lib/tracker");
 const { generateImage, generateCaption } = require("./lib/ai");
-const { publishToInstagram, nowInCostaRica } = require("./lib/instagram");
-const { notify, notifyError } = require("./lib/notify");
+const { sendDraft, sendError } = require("./lib/email");
 
 async function main() {
   const catalog = getCatalog();
@@ -22,17 +28,14 @@ async function main() {
       generateCaption(product),
     ]);
 
-    const postId = await publishToInstagram({ imageUrl, caption });
-    const publishedAt = nowInCostaRica();
+    await sendDraft(product, imageUrl, caption);
 
-    markPublished(product, postId);
+    markPublished(product, "draft-emailed");
 
-    await notify(product, publishedAt);
-
-    console.log(`Publicado: ${product.slug} (post ${postId})`);
+    console.log(`Draft enviado por correo: ${product.slug}`);
   } catch (err) {
     markFailed(product, err.message);
-    await notifyError(product, err.message);
+    await sendError(product, err.message);
     console.error("Error en daily-post:", err);
     process.exit(1);
   }
