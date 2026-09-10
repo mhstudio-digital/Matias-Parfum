@@ -111,7 +111,104 @@
   </section>
 </div>
 
+<!-- ══ RELACIONADOS ═══════════════════════════════════════════ -->
+
+<section class="catalog-section relacionados-section" aria-labelledby="relacionados-heading">
+  <p class="section-eye">También te puede interesar</p>
+  <h2 class="section-h" id="relacionados-heading">Perfumes <em>similares</em>.</h2>
+  <div class="products-grid" role="list">
+<div class="card" data-nombre="Armaf ODYSSEY ARTISTO 100ML EDP" data-tipo="Unisex" data-brand="Odyssey" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
+  <a href="/productos/armaf-odyssey-artisto-100ml-edp.html" class="card-image-wrap" aria-label="Ver Armaf ODYSSEY ARTISTO 100ML EDP">
+    <img loading="lazy" src="/img/ARTISTO.png" alt="Armaf ODYSSEY ARTISTO 100ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Odyssey</span>
+    <h3 class="card-title"><a href="/productos/armaf-odyssey-artisto-100ml-edp.html">Armaf ODYSSEY ARTISTO 100ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental Especiado</span>
+      <span class="card-notas">Bergamota · Sándalo · Almizcle</span>
+    </div>
+    <p class="precio">₡28,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Armaf ODYSSEY ARTISTO 100ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Rave NOW ROUGE 100ML EDP" data-tipo="Unisex" data-brand="Otra" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="9">
+  <a href="/productos/rave-now-rouge-100ml-edp.html" class="card-image-wrap" aria-label="Ver Rave NOW ROUGE 100ML EDP">
+    <img loading="lazy" src="/img/NOW ROUGE.png" alt="Rave NOW ROUGE 100ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Otra</span>
+    <h3 class="card-title"><a href="/productos/rave-now-rouge-100ml-edp.html">Rave NOW ROUGE 100ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental Especiado</span>
+      <span class="card-notas">Especias · Oud · Almizcle</span>
+    </div>
+    <p class="precio">₡24,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Rave NOW ROUGE 100ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Orientica OUD SAFFRON 80ML EDP" data-tipo="Unisex" data-brand="Orientica" data-familia="Oriental Especiado" data-intensidad="5" data-duracion="10">
+  <a href="/productos/orientica-oud-saffron-80ml-edp.html" class="card-image-wrap" aria-label="Ver Orientica OUD SAFFRON 80ML EDP">
+    <img loading="lazy" src="/img/OUD SAFFRON.png" alt="Orientica OUD SAFFRON 80ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Orientica</span>
+    <h3 class="card-title"><a href="/productos/orientica-oud-saffron-80ml-edp.html">Orientica OUD SAFFRON 80ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental Especiado</span>
+      <span class="card-notas">Azafrán · Oud · Sándalo</span>
+    </div>
+    <p class="precio">₡45,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Orientica OUD SAFFRON 80ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Yves Saint Laurent EDP 100 ml" data-tipo="Hombre" data-brand="YSL" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="8">
+  <a href="/productos/yves-saint-laurent-edp-100-ml.html" class="card-image-wrap" aria-label="Ver Yves Saint Laurent EDP 100 ml">
+    <img loading="lazy" src="/img/EDPSAINT.jpg" alt="Yves Saint Laurent EDP 100 ml" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">YSL</span>
+    <h3 class="card-title"><a href="/productos/yves-saint-laurent-edp-100-ml.html">Yves Saint Laurent EDP 100 ml</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental Especiado</span>
+      <span class="card-notas">Bergamota · Jengibre · Cedro</span>
+    </div>
+    <p class="precio">₡75,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Yves Saint Laurent EDP 100 ml&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
 <script>
+  // Usada por el botón "Consultar por WhatsApp" de las cards de la sección
+  // de productos relacionados (mismo comportamiento que en index.html).
+  function consultarPerfume(nombre) {
+    const msg = 'Hola! Me interesa el perfume: ' + nombre;
+    window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  }
+
   const PRICE = parseInt(document.getElementById('priceDisplay').dataset.price, 10);
   let qty = 1;
 
