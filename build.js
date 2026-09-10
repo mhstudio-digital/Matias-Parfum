@@ -269,9 +269,33 @@ indexHtml = antesActualizado + desdeCardsEnAdelante;
 
 fs.writeFileSync(indexPath, indexHtml, 'utf8');
 
+// ---------- Generar sitemap.xml ----------
+// Incluye la home y las páginas de TODOS los productos (antes era una lista
+// curada a mano con solo 38/242). Prioridad más alta para los slugs
+// destacados en DESTACADOS_SLUGS.
+function xmlEscape(s) {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+const hoy = new Date().toISOString().slice(0, 10);
+const sitemapUrls = [
+  `  <url>\n    <loc>https://matiasparfum.com/</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>`,
+  ...productos.map(p => {
+    const esDestacado = DESTACADOS_SLUGS.includes(p.slug);
+    const priority = esDestacado ? '0.9' : '0.8';
+    return `  <url>\n    <loc>https://matiasparfum.com/productos/${xmlEscape(p.slug)}.html</loc>\n    <changefreq>monthly</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  }),
+];
+const sitemapXml =
+  '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n' +
+  sitemapUrls.join('\n\n') +
+  '\n\n</urlset>\n';
+fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml, 'utf8');
+
 console.log(`Productos procesados: ${productos.length}`);
 console.log(`Páginas generadas en productos/: ${paginasGeneradas}`);
 console.log(`Cards inyectadas en index.html: ${productos.length}`);
 console.log(`Contador de fragancias actualizado a: ${productos.length}`);
 console.log(`Destacados ("más buscados") inyectados: ${destacados.length}/${DESTACADOS_SLUGS.length}`);
 console.log(`Nuevos ingresos inyectados: ${nuevosIngresos.length}/${NUEVOS_INGRESOS_SLUGS.length}`);
+console.log(`Sitemap generado con ${sitemapUrls.length} URLs (antes: 39, ahora: home + ${productos.length} productos)`);
