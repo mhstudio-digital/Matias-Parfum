@@ -111,7 +111,104 @@
   </section>
 </div>
 
+<!-- ══ RELACIONADOS ═══════════════════════════════════════════ -->
+
+<section class="catalog-section relacionados-section" aria-labelledby="relacionados-heading">
+  <p class="section-eye">También te puede interesar</p>
+  <h2 class="section-h" id="relacionados-heading">Perfumes <em>similares</em>.</h2>
+  <div class="products-grid" role="list">
+<div class="card" data-nombre="Jean Paul Gaultier Le Male" data-tipo="Hombre" data-brand="Jean Paul Gaultier" data-familia="Oriental" data-intensidad="4" data-duracion="8">
+  <a href="/productos/jean-paul-gaultier-le-male-100ml-edt.html" class="card-image-wrap" aria-label="Ver Jean Paul Gaultier Le Male">
+    <img loading="lazy" src="/img/lemal1.jpg" alt="Jean Paul Gaultier Le Male" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Jean Paul Gaultier</span>
+    <h3 class="card-title"><a href="/productos/jean-paul-gaultier-le-male-100ml-edt.html">Jean Paul Gaultier Le Male</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental</span>
+      <span class="card-notas">Lavanda · Vainilla · Almizclado</span>
+    </div>
+    <p class="precio">₡65,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Jean Paul Gaultier Le Male&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="BHARARA VIKING RIO 100ML EDP" data-tipo="Hombre" data-brand="Bharara" data-familia="Oriental" data-intensidad="4" data-duracion="9">
+  <a href="/productos/bharara-viking-rio-100ml-edp.html" class="card-image-wrap" aria-label="Ver BHARARA VIKING RIO 100ML EDP">
+    <img loading="lazy" src="/img/BHARARA VIKING RIO 100ML EDP.png" alt="BHARARA VIKING RIO 100ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Bharara</span>
+    <h3 class="card-title"><a href="/productos/bharara-viking-rio-100ml-edp.html">BHARARA VIKING RIO 100ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental</span>
+      <span class="card-notas">Oud · Ámbar · Vainilla</span>
+    </div>
+    <p class="precio">₡45,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;BHARARA VIKING RIO 100ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Lattafa AJWAD 60ML EDP" data-tipo="Unisex" data-brand="Lattafa" data-familia="Oriental" data-intensidad="5" data-duracion="10">
+  <a href="/productos/lattafa-ajwad-60ml-edp.html" class="card-image-wrap" aria-label="Ver Lattafa AJWAD 60ML EDP">
+    <img loading="lazy" src="/img/LattafaAJWAD.png" alt="Lattafa AJWAD 60ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Lattafa</span>
+    <h3 class="card-title"><a href="/productos/lattafa-ajwad-60ml-edp.html">Lattafa AJWAD 60ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental</span>
+      <span class="card-notas">Vainilla · Cedro · Almizclado</span>
+    </div>
+    <p class="precio">₡20,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Lattafa AJWAD 60ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Orientica VELVET GOLD 80ML EDP" data-tipo="Unisex" data-brand="Orientica" data-familia="Oriental" data-intensidad="4" data-duracion="9">
+  <a href="/productos/orientica-velvet-gold-80ml-edp.html" class="card-image-wrap" aria-label="Ver Orientica VELVET GOLD 80ML EDP">
+    <img loading="lazy" src="/img/VELVET GOLD.png" alt="Orientica VELVET GOLD 80ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Orientica</span>
+    <h3 class="card-title"><a href="/productos/orientica-velvet-gold-80ml-edp.html">Orientica VELVET GOLD 80ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental</span>
+      <span class="card-notas">Oud · Ámbar · Especias</span>
+    </div>
+    <p class="precio">₡47,500</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Orientica VELVET GOLD 80ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
 <script>
+  // Usada por el botón "Consultar por WhatsApp" de las cards de la sección
+  // de productos relacionados (mismo comportamiento que en index.html).
+  function consultarPerfume(nombre) {
+    const msg = 'Hola! Me interesa el perfume: ' + nombre;
+    window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  }
+
   const PRICE = parseInt(document.getElementById('priceDisplay').dataset.price, 10);
   let qty = 1;
 

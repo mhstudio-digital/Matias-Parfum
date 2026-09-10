@@ -111,7 +111,104 @@
   </section>
 </div>
 
+<!-- ══ RELACIONADOS ═══════════════════════════════════════════ -->
+
+<section class="catalog-section relacionados-section" aria-labelledby="relacionados-heading">
+  <p class="section-eye">También te puede interesar</p>
+  <h2 class="section-h" id="relacionados-heading">Perfumes <em>similares</em>.</h2>
+  <div class="products-grid" role="list">
+<div class="card" data-nombre="Dior POISON GIRL 100ML EDT" data-tipo="Mujer" data-brand="Dior" data-familia="Fresco Amaderado" data-intensidad="4" data-duracion="9">
+  <a href="/productos/dior-poison-girl-100ml-edt.html" class="card-image-wrap" aria-label="Ver Dior POISON GIRL 100ML EDT">
+    <img loading="lazy" src="/img/POISONGIRL.png" alt="Dior POISON GIRL 100ML EDT" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Dior</span>
+    <h3 class="card-title"><a href="/productos/dior-poison-girl-100ml-edt.html">Dior POISON GIRL 100ML EDT</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Fresco Amaderado</span>
+      <span class="card-notas">Naranja amarga · Vainilla · Rosa</span>
+    </div>
+    <p class="precio">₡68,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Dior POISON GIRL 100ML EDT&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Orientica ROYAL BLEU 80ML EDP" data-tipo="Unisex" data-brand="Orientica" data-familia="Fresco Amaderado" data-intensidad="4" data-duracion="9">
+  <a href="/productos/orientica-royal-bleu-80ml-edp.html" class="card-image-wrap" aria-label="Ver Orientica ROYAL BLEU 80ML EDP">
+    <img loading="lazy" src="/img/ROYAL BLEU.png" alt="Orientica ROYAL BLEU 80ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Orientica</span>
+    <h3 class="card-title"><a href="/productos/orientica-royal-bleu-80ml-edp.html">Orientica ROYAL BLEU 80ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Fresco Amaderado</span>
+      <span class="card-notas">Bergamota · Cedro · Lavanda</span>
+    </div>
+    <p class="precio">₡47,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Orientica ROYAL BLEU 80ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Yves Saint Laurent OPIUM 90ML EDT" data-tipo="Mujer" data-brand="YSL" data-familia="Oriental Especiado" data-intensidad="4" data-duracion="8">
+  <a href="/productos/yves-saint-laurent-opium-90ml-edt.html" class="card-image-wrap" aria-label="Ver Yves Saint Laurent OPIUM 90ML EDT">
+    <img loading="lazy" src="/img/OPIUM.png" alt="Yves Saint Laurent OPIUM 90ML EDT" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">YSL</span>
+    <h3 class="card-title"><a href="/productos/yves-saint-laurent-opium-90ml-edt.html">Yves Saint Laurent OPIUM 90ML EDT</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental Especiado</span>
+      <span class="card-notas">Clavo · Incienso · Ámbar</span>
+    </div>
+    <p class="precio">₡53,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Yves Saint Laurent OPIUM 90ML EDT&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+<div class="card" data-nombre="Lattafa SEHR 100ML EDP" data-tipo="Unisex" data-brand="Lattafa" data-familia="Oriental" data-intensidad="5" data-duracion="10">
+  <a href="/productos/lattafa-sehr-100ml-edp.html" class="card-image-wrap" aria-label="Ver Lattafa SEHR 100ML EDP">
+    <img loading="lazy" src="/img/LattafaSEHR.png" alt="Lattafa SEHR 100ML EDP" width="400" height="533">
+    <div class="card-overlay" aria-hidden="true">
+      <span class="card-overlay-btn">Ver perfume</span>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="card-brand">Lattafa</span>
+    <h3 class="card-title"><a href="/productos/lattafa-sehr-100ml-edp.html">Lattafa SEHR 100ML EDP</a></h3>
+    <div class="card-meta">
+      <span class="card-familia">Oriental</span>
+      <span class="card-notas">Oud · Ámbar · Incienso</span>
+    </div>
+    <p class="precio">₡45,000</p>
+    <div class="card-buttons">
+      <button class="consultar-btn" onclick="consultarPerfume(&#39;Lattafa SEHR 100ML EDP&#39;)">Consultar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
 <script>
+  // Usada por el botón "Consultar por WhatsApp" de las cards de la sección
+  // de productos relacionados (mismo comportamiento que en index.html).
+  function consultarPerfume(nombre) {
+    const msg = 'Hola! Me interesa el perfume: ' + nombre;
+    window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  }
+
   const PRICE = parseInt(document.getElementById('priceDisplay').dataset.price, 10);
   let qty = 1;
 
