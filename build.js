@@ -5,6 +5,22 @@ const ejs = require('ejs');
 const ROOT = __dirname;
 const productos = require(path.join(ROOT, 'productos.json'));
 
+// ---------- Selección "Los más buscados" (curada a mano) ----------
+// Fragancias de reconocimiento mundial (más buscadas/vendidas a nivel
+// internacional según el mercado de perfumería), filtradas a las que
+// realmente están en nuestro catálogo. Actualizar esta lista a mano si
+// se quiere cambiar la selección.
+const DESTACADOS_SLUGS = [
+  'christian-dior-sauvage-200ml-edp',
+  'yves-saint-laurent-black-opium-90ml-edp',
+  'jean-paul-gaultier-le-male-100ml-edt',
+  'giorgio-armani-acqua-di-gio-100ml-edt',
+  'paco-rabanne-one-million-edt',
+  'versace-eros-100ml-edt',
+  'dior-jadore-100ml-edp',
+  'carolina-herrera-212-vip-black-100ml-edp',
+];
+
 const cardTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'card.ejs'), 'utf8');
 const productoTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'producto.ejs'), 'utf8');
 
@@ -110,6 +126,19 @@ const cardsHtml = productos
   .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
   .join('\n');
 
+// ---------- Generar el bloque de "Los más buscados" ----------
+const destacados = DESTACADOS_SLUGS
+  .map(slug => {
+    const p = productos.find(prod => prod.slug === slug);
+    if (!p) console.warn(`Aviso: slug destacado "${slug}" no existe en productos.json, se omite.`);
+    return p;
+  })
+  .filter(Boolean);
+
+const destacadosHtml = destacados
+  .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
+  .join('\n');
+
 const inicioMarcador = '<!-- CARDS:START -->';
 const finMarcador = '<!-- CARDS:END -->';
 const inicioIdx = indexHtml.indexOf(inicioMarcador);
@@ -121,6 +150,18 @@ indexHtml =
   indexHtml.slice(0, inicioIdx + inicioMarcador.length) +
   '\n' + cardsHtml + '\n' +
   indexHtml.slice(finIdx);
+
+const inicioDestMarcador = '<!-- DESTACADOS:START -->';
+const finDestMarcador = '<!-- DESTACADOS:END -->';
+const inicioDestIdx = indexHtml.indexOf(inicioDestMarcador);
+const finDestIdx = indexHtml.indexOf(finDestMarcador);
+if (inicioDestIdx === -1 || finDestIdx === -1) {
+  throw new Error('No se encontraron los marcadores DESTACADOS:START / DESTACADOS:END en index.html');
+}
+indexHtml =
+  indexHtml.slice(0, inicioDestIdx + inicioDestMarcador.length) +
+  '\n' + destacadosHtml + '\n' +
+  indexHtml.slice(finDestIdx);
 
 // ---------- Actualizar el contador de fragancias ("230" -> productos.length) ----------
 // El contador vive como texto plano ("Más de 230 fragancias", stat-num "230+")
@@ -137,3 +178,4 @@ console.log(`Productos procesados: ${productos.length}`);
 console.log(`Páginas generadas en productos/: ${paginasGeneradas}`);
 console.log(`Cards inyectadas en index.html: ${productos.length}`);
 console.log(`Contador de fragancias actualizado a: ${productos.length}`);
+console.log(`Destacados ("más buscados") inyectados: ${destacados.length}/${DESTACADOS_SLUGS.length}`);
