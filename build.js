@@ -63,11 +63,69 @@ function viewCard(p) {
     familia: p.familia,
     intensidad: p.intensidad,
     duracionHoras: horasDe(p.duracion),
-    imagen: p.imagen,
     notasTexto: p.notas.join(' · '),
     precioTexto: (p.precioDesde ? 'Desde ' : '') + '₡' + conMiles(p.precio, ','),
-    hrefProducto: 'productos/' + p.slug + '.html',
+    // Rutas absolutas (con "/" inicial): así la card funciona igual embebida
+    // en index.html (raíz) que en productos/{slug}.html (subcarpeta) — p. ej.
+    // en la sección de "Productos relacionados" dentro de cada ficha.
+    hrefProducto: '/productos/' + p.slug + '.html',
+    imagen: '/' + p.imagen,
   };
+}
+
+// ---------- Productos relacionados ("también te puede interesar") ----------
+// Similitud por familia olfativa, marca, notas compartidas y cercanía de
+// precio. Se prioriza variedad de marca (máx. 1 repetida en el primer
+// intento) para no llenar la sección solo con variantes del mismo perfume,
+// pero se relaja el criterio en cascada hasta completar siempre 4 resultados.
+function scoreSimilitud(a, b) {
+  let score = 0;
+  if (a.familia === b.familia) score += 4;
+  if (a.marca === b.marca) score += 3;
+  const notasB = new Set(b.notas);
+  const overlap = a.notas.filter(n => notasB.has(n)).length;
+  score += Math.min(overlap, 3);
+  const priceDiff = Math.abs(a.precio - b.precio) / a.precio;
+  if (priceDiff < 0.15) score += 1;
+  else if (priceDiff < 0.3) score += 0.5;
+  return score;
+}
+function relacionados(p, all, n = 4) {
+  const generoCompatible = x => x.slug !== p.slug &&
+    (x.genero === p.genero || x.genero === 'unisex' || p.genero === 'unisex');
+  let pool = all.filter(generoCompatible);
+  if (pool.length < n) pool = all.filter(x => x.slug !== p.slug);
+
+  const scored = pool.map(x => ({ x, s: scoreSimilitud(p, x) }));
+  scored.sort((A, B) => {
+    if (B.s !== A.s) return B.s - A.s;
+    const dA = Math.abs(p.precio - A.x.precio), dB = Math.abs(p.precio - B.x.precio);
+    if (dA !== dB) return dA - dB;
+    return A.x.slug.localeCompare(B.x.slug);
+  });
+
+  const intentos = [
+    { cap: 1, minScore: 2 },
+    { cap: 2, minScore: 2 },
+    { cap: 2, minScore: 0 },
+    { cap: n, minScore: 0 },
+  ];
+  for (const { cap, minScore } of intentos) {
+    const elegidos = [];
+    const porMarca = {};
+    for (const item of scored) {
+      if (item.s < minScore) continue;
+      const m = item.x.marca;
+      porMarca[m] = porMarca[m] || 0;
+      if (porMarca[m] < cap) {
+        elegidos.push(item);
+        porMarca[m]++;
+      }
+      if (elegidos.length === n) break;
+    }
+    if (elegidos.length === n) return elegidos.map(o => o.x);
+  }
+  return scored.slice(0, n).map(o => o.x);
 }
 
 // ---------- Preparar view-model de cada página de producto ----------
@@ -112,6 +170,9 @@ function viewProducto(p) {
     intensidad: p.intensidad,
     duracionHoras: horasDe(p.duracion),
     sizeParaMensaje: sizeParaMensaje(p['tamaño']),
+    relacionadosHtml: relacionados(p, productos)
+      .map(rp => ejs.render(cardTemplate, { p: viewCard(rp) }).trim())
+      .join('\n'),
   };
 }
 
