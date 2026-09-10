@@ -292,6 +292,48 @@ const sitemapXml =
   '\n\n</urlset>\n';
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml, 'utf8');
 
+// ---------- Generar feed de Google Shopping (Merchant Center) ----------
+// Formato RSS 2.0 con namespace g: que espera Google. Sin GTIN/MPN propios
+// (no tenemos ese dato de fábrica), así que declaramos identifier_exists=no
+// para que Google no rechace el ítem por falta de identificador único.
+function xmlEscapeFull(s) {
+  return (s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+const categoriaGoogle = 'Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne';
+const feedItems = productos.map(p => {
+  const link = `https://matiasparfum.com/productos/${p.slug}.html`;
+  const imageLink = urlImagenAbsoluta(p.imagen);
+  return [
+    '  <item>',
+    `    <g:id>${xmlEscapeFull(p.slug)}</g:id>`,
+    `    <title>${xmlEscapeFull(p.tituloCard)}</title>`,
+    `    <description>${xmlEscapeFull(p.descripcion)}</description>`,
+    `    <link>${link}</link>`,
+    `    <g:image_link>${imageLink}</g:image_link>`,
+    '    <g:availability>in stock</g:availability>',
+    `    <g:price>${p.precio} CRC</g:price>`,
+    `    <g:brand>${xmlEscapeFull(p.marca)}</g:brand>`,
+    '    <g:condition>new</g:condition>',
+    '    <g:identifier_exists>no</g:identifier_exists>',
+    `    <g:google_product_category>${categoriaGoogle}</g:google_product_category>`,
+    '  </item>',
+  ].join('\n');
+});
+const feedXml =
+  '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n' +
+  '<channel>\n' +
+  '  <title>Matías Parfum</title>\n' +
+  '  <link>https://matiasparfum.com</link>\n' +
+  '  <description>Perfumes 100% originales en Costa Rica</description>\n\n' +
+  feedItems.join('\n\n') +
+  '\n\n</channel>\n' +
+  '</rss>\n';
+fs.writeFileSync(path.join(ROOT, 'google-shopping-feed.xml'), feedXml, 'utf8');
+
 console.log(`Productos procesados: ${productos.length}`);
 console.log(`Páginas generadas en productos/: ${paginasGeneradas}`);
 console.log(`Cards inyectadas en index.html: ${productos.length}`);
@@ -299,3 +341,4 @@ console.log(`Contador de fragancias actualizado a: ${productos.length}`);
 console.log(`Destacados ("más buscados") inyectados: ${destacados.length}/${DESTACADOS_SLUGS.length}`);
 console.log(`Nuevos ingresos inyectados: ${nuevosIngresos.length}/${NUEVOS_INGRESOS_SLUGS.length}`);
 console.log(`Sitemap generado con ${sitemapUrls.length} URLs (antes: 39, ahora: home + ${productos.length} productos)`);
+console.log(`Feed de Google Shopping generado con ${feedItems.length} productos`);
