@@ -48,7 +48,7 @@ Reglas:
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta/llama3-70b-instruct",
+        model: "meta/llama-3.3-70b-instruct",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.8,
         max_tokens: 400,
