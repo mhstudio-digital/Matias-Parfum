@@ -3119,7 +3119,31 @@
     "duracion": "7 horas",
     "descripcion": "Versace DYLAN TURQUOISE POUR FEMME 100ML EDT 100% original en Costa Rica. Familia Acuático."
   },
-  {
+    {
+    "slug": "versace-dylan-blush-pink-100ml-edp",
+    "nombre": "DYLAN BLUSH PINK POUR FEMME",
+    "nombreCompleto": "DYLAN BLUSH PINK POUR FEMME 100ML EDP",
+    "tituloCard": "Versace DYLAN BLUSH PINK POUR FEMME 100ML EDP",
+    "breadcrumbFinal": "DYLAN BLUSH PINK POUR FEMME",
+    "marca": "Versace",
+    "genero": "mujer",
+    "familia": "Floral Frutal Gourmand",
+    "categoria": "florales",
+    "tamaño": "100ml",
+    "concentracion": "EDP",
+    "precio": 44000,
+    "precioDesde": false,
+    "imagen": "img/versace-dylan-blush-pink-100ml-edp.jpg",
+    "notas": [
+      "Manzana",
+      "Malvavisco",
+      "Vainilla"
+    ],
+    "intensidad": 3,
+    "duracion": "7 horas",
+    "descripcion": "Versace DYLAN BLUSH PINK POUR FEMME 100ML EDP 100% original en Costa Rica. Familia Floral Frutal Gourmand."
+  },
+{
     "slug": "versace-versense-100ml-edt",
     "nombre": "VERSENSE",
     "nombreCompleto": "VERSENSE 100ML EDT",
