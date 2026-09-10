@@ -169,7 +169,7 @@ indexHtml =
 // cards nuevas para no tocar por accidente un precio que contenga "230".
 const antesDeCards = indexHtml.slice(0, indexHtml.indexOf(inicioMarcador));
 const desdeCardsEnAdelante = indexHtml.slice(indexHtml.indexOf(inicioMarcador));
-const antesActualizado = antesDeCards.split('230').join(String(productos.length));
+const antesActualizado = (() => { let done = false; return antesDeCards.replace(/Más de \d{2,4} fragancias/g, `Más de ${productos.length} fragancias`).replace(/(class="stat-num">)\d{2,4}(<span)/g, (m,p1,p2) => done ? m : (done = true, `${p1}${productos.length}${p2}`)); })();
 indexHtml = antesActualizado + desdeCardsEnAdelante;
 
 fs.writeFileSync(indexPath, indexHtml, 'utf8');
