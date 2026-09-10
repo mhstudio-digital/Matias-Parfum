@@ -21,6 +21,14 @@ const DESTACADOS_SLUGS = [
   'carolina-herrera-212-vip-black-100ml-edp',
 ];
 
+// ---------- Selección "Recién Llegados" (curada a mano) ----------
+// Productos que acaban de sumarse al catálogo. Actualizar esta lista
+// a mano cada vez que lleguen fragancias nuevas.
+const NUEVOS_INGRESOS_SLUGS = [
+  'paco-rabanne-phantom-in-red-100ml-parfum',
+  'paco-rabanne-fame-in-love-80ml-parfum',
+];
+
 const cardTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'card.ejs'), 'utf8');
 const productoTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'producto.ejs'), 'utf8');
 
@@ -139,6 +147,19 @@ const destacadosHtml = destacados
   .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
   .join('\n');
 
+// ---------- Generar el bloque de "Recién Llegados" ----------
+const nuevosIngresos = NUEVOS_INGRESOS_SLUGS
+  .map(slug => {
+    const p = productos.find(prod => prod.slug === slug);
+    if (!p) console.warn(`Aviso: slug de nuevo ingreso "${slug}" no existe en productos.json, se omite.`);
+    return p;
+  })
+  .filter(Boolean);
+
+const nuevosIngresosHtml = nuevosIngresos
+  .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
+  .join('\n');
+
 const inicioMarcador = '<!-- CARDS:START -->';
 const finMarcador = '<!-- CARDS:END -->';
 const inicioIdx = indexHtml.indexOf(inicioMarcador);
@@ -163,6 +184,18 @@ indexHtml =
   '\n' + destacadosHtml + '\n' +
   indexHtml.slice(finDestIdx);
 
+const inicioNuevosMarcador = '<!-- NUEVOS:START -->';
+const finNuevosMarcador = '<!-- NUEVOS:END -->';
+const inicioNuevosIdx = indexHtml.indexOf(inicioNuevosMarcador);
+const finNuevosIdx = indexHtml.indexOf(finNuevosMarcador);
+if (inicioNuevosIdx === -1 || finNuevosIdx === -1) {
+  throw new Error('No se encontraron los marcadores NUEVOS:START / NUEVOS:END en index.html');
+}
+indexHtml =
+  indexHtml.slice(0, inicioNuevosIdx + inicioNuevosMarcador.length) +
+  '\n' + nuevosIngresosHtml + '\n' +
+  indexHtml.slice(finNuevosIdx);
+
 // ---------- Actualizar el contador de fragancias ("230" -> productos.length) ----------
 // El contador vive como texto plano ("Más de 230 fragancias", stat-num "230+")
 // fuera del bloque de cards, así que se reemplaza ANTES de haber insertado las
@@ -179,3 +212,4 @@ console.log(`Páginas generadas en productos/: ${paginasGeneradas}`);
 console.log(`Cards inyectadas en index.html: ${productos.length}`);
 console.log(`Contador de fragancias actualizado a: ${productos.length}`);
 console.log(`Destacados ("más buscados") inyectados: ${destacados.length}/${DESTACADOS_SLUGS.length}`);
+console.log(`Nuevos ingresos inyectados: ${nuevosIngresos.length}/${NUEVOS_INGRESOS_SLUGS.length}`);
