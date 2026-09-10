@@ -14,10 +14,10 @@ const NVIDIA_CHAT_URL = "https://integrate.api.nvidia.com/v1/chat/completions";
 // dar la respuesta final. Probamos varios en orden y validamos cada
 // respuesta antes de usarla — si una no pasa, probamos la siguiente.
 const CANDIDATE_MODELS = [
+  "nvidia/nemotron-3-super-120b-a12b",
   "qwen/qwen3.5-122b-a10b",
   "mistralai/mistral-small-4-119b-2603",
   "meta/llama-3.3-70b-instruct",
-  "nvidia/nemotron-3-super-120b-a12b",
 ];
 
 /**
@@ -78,6 +78,11 @@ Reglas:
           messages: [{ role: "user", content: prompt }],
           temperature: 0.8,
           max_tokens: 400,
+          // Nemotron es un modelo de "razonamiento": sin esto, a veces
+          // devuelve su pensamiento interno en vez de la respuesta final.
+          ...(model.startsWith("nvidia/nemotron")
+            ? { chat_template_kwargs: { enable_thinking: false } }
+            : {}),
         }),
       });
 
