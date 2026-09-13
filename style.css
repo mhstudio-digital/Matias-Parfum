@@ -892,6 +892,20 @@ input,select { font-family:var(--sans) }
 .pp-wa:hover { opacity:.9; transform:translateY(-2px) }
 .pp-wa svg { width:19px; height:19px; fill:#fff; flex-shrink:0 }
 
+/* Share button */
+.pp-share {
+  display:flex; align-items:center; justify-content:center; gap:11px;
+  width:100%; background:transparent; color:var(--gold-lt);
+  border:1px solid var(--gold-line);
+  font-size:10px; letter-spacing:.28em; text-transform:uppercase; font-weight:500;
+  padding:17px 24px; margin-bottom:10px;
+  transition:opacity .25s, transform .2s var(--ease), border-color .25s, background .25s;
+}
+.pp-share:hover { border-color:var(--gold); background:var(--gold-dim); transform:translateY(-2px) }
+.pp-share svg { width:17px; height:17px; fill:none; stroke:var(--gold-lt); stroke-width:1.6; flex-shrink:0 }
+.pp-share.is-done { border-color:var(--wa); color:var(--wa) }
+.pp-share.is-done svg { stroke:var(--wa) }
+
 /* Back link */
 .pp-back {
   display:block; text-align:center;
