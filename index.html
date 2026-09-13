@@ -377,13 +377,6 @@
       <button class="filter-cat"        data-cat="frescos"    onclick="filtrarCategoria('frescos',this)"    aria-pressed="false">Frescos</button>
     </div>
     <div class="filter-sep" aria-hidden="true"></div>
-    <div class="filter-genders" role="group" aria-label="Género">
-      <button class="filter-gen active" data-gen="todos"  onclick="filtrarGenero('todos',this)"  aria-pressed="true">Todos</button>
-      <button class="filter-gen"        data-gen="Hombre" onclick="filtrarGenero('Hombre',this)" aria-pressed="false">Hombre</button>
-      <button class="filter-gen"        data-gen="Mujer"  onclick="filtrarGenero('Mujer',this)"  aria-pressed="false">Mujer</button>
-      <button class="filter-gen"        data-gen="Unisex" onclick="filtrarGenero('Unisex',this)" aria-pressed="false">Unisex</button>
-    </div>
-    <div class="filter-sep" aria-hidden="true"></div>
     <div class="filter-search-wrap">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="search" placeholder="Buscar fragancia…" autocomplete="off" aria-label="Buscar fragancia" oninput="filtrarBusqueda(this.value)">
@@ -395,6 +388,73 @@
 <!-- ══ CATÁLOGO ══════════════════════════════════════════════ -->
 <section class="catalog-section" id="catalogo" aria-labelledby="catalog-heading">
   <h2 id="catalog-heading" class="visually-hidden">Catálogo de fragancias</h2>
+  <div class="catalog-layout">
+    <aside class="catalog-sidebar" aria-label="Filtros de catálogo">
+      <div class="sidebar-group">
+        <h3 class="sidebar-title">Tipo</h3>
+        <label class="sidebar-check"><input type="checkbox" class="tipo-check" value="Hombre" onchange="toggleTipo(this)"><span class="check-label">Hombre</span><span class="sidebar-count">135</span></label>
+        <label class="sidebar-check"><input type="checkbox" class="tipo-check" value="Mujer" onchange="toggleTipo(this)"><span class="check-label">Mujer</span><span class="sidebar-count">63</span></label>
+        <label class="sidebar-check"><input type="checkbox" class="tipo-check" value="Unisex" onchange="toggleTipo(this)"><span class="check-label">Unisex</span><span class="sidebar-count">92</span></label>
+      </div>
+      <div class="sidebar-group">
+        <h3 class="sidebar-title">Marca</h3>
+        <div class="sidebar-brand-list" id="brandList">
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Afnan" onchange="toggleMarca(this)"><span class="check-label">Afnan</span><span class="sidebar-count">3</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Al Haramain" onchange="toggleMarca(this)"><span class="check-label">Al Haramain</span><span class="sidebar-count">7</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Al Haramain Perfumes" onchange="toggleMarca(this)"><span class="check-label">Al Haramain Perfumes</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Antonio Puig" onchange="toggleMarca(this)"><span class="check-label">Antonio Puig</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Armaf" onchange="toggleMarca(this)"><span class="check-label">Armaf</span><span class="sidebar-count">17</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Azzaro" onchange="toggleMarca(this)"><span class="check-label">Azzaro</span><span class="sidebar-count">7</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Benetton" onchange="toggleMarca(this)"><span class="check-label">Benetton</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Bharara" onchange="toggleMarca(this)"><span class="check-label">Bharara</span><span class="sidebar-count">5</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Carolina Herrera" onchange="toggleMarca(this)"><span class="check-label">Carolina Herrera</span><span class="sidebar-count">14</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Chanel" onchange="toggleMarca(this)"><span class="check-label">Chanel</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Cristiano Ronaldo" onchange="toggleMarca(this)"><span class="check-label">Cristiano Ronaldo</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Desconocida" onchange="toggleMarca(this)"><span class="check-label">Desconocida</span><span class="sidebar-count">2</span></label>
+          <div class="brand-extra" id="brandExtra" hidden>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Dior" onchange="toggleMarca(this)"><span class="check-label">Dior</span><span class="sidebar-count">13</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Dolce & Gabbana" onchange="toggleMarca(this)"><span class="check-label">Dolce & Gabbana</span><span class="sidebar-count">9</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Dumont" onchange="toggleMarca(this)"><span class="check-label">Dumont</span><span class="sidebar-count">2</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Emper" onchange="toggleMarca(this)"><span class="check-label">Emper</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Emper Le Chameu" onchange="toggleMarca(this)"><span class="check-label">Emper Le Chameu</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Faconnable" onchange="toggleMarca(this)"><span class="check-label">Faconnable</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="French Avenue" onchange="toggleMarca(this)"><span class="check-label">French Avenue</span><span class="sidebar-count">4</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Giorgio Armani" onchange="toggleMarca(this)"><span class="check-label">Giorgio Armani</span><span class="sidebar-count">13</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Givenchy" onchange="toggleMarca(this)"><span class="check-label">Givenchy</span><span class="sidebar-count">2</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Halloween" onchange="toggleMarca(this)"><span class="check-label">Halloween</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Hawas" onchange="toggleMarca(this)"><span class="check-label">Hawas</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Hollister" onchange="toggleMarca(this)"><span class="check-label">Hollister</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Hugo Boss" onchange="toggleMarca(this)"><span class="check-label">Hugo Boss</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Jean Paul Gaultier" onchange="toggleMarca(this)"><span class="check-label">Jean Paul Gaultier</span><span class="sidebar-count">12</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Jo Milano Paris" onchange="toggleMarca(this)"><span class="check-label">Jo Milano Paris</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Lattafa" onchange="toggleMarca(this)"><span class="check-label">Lattafa</span><span class="sidebar-count">37</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Maison Alhambra" onchange="toggleMarca(this)"><span class="check-label">Maison Alhambra</span><span class="sidebar-count">8</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Mancera" onchange="toggleMarca(this)"><span class="check-label">Mancera</span><span class="sidebar-count">3</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Mont Blanc" onchange="toggleMarca(this)"><span class="check-label">Mont Blanc</span><span class="sidebar-count">2</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Montale Paris" onchange="toggleMarca(this)"><span class="check-label">Montale Paris</span><span class="sidebar-count">2</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Moschino" onchange="toggleMarca(this)"><span class="check-label">Moschino</span><span class="sidebar-count">6</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Odyssey" onchange="toggleMarca(this)"><span class="check-label">Odyssey</span><span class="sidebar-count">9</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Orientica" onchange="toggleMarca(this)"><span class="check-label">Orientica</span><span class="sidebar-count">6</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Paco Rabanne" onchange="toggleMarca(this)"><span class="check-label">Paco Rabanne</span><span class="sidebar-count">19</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Perry Ellis" onchange="toggleMarca(this)"><span class="check-label">Perry Ellis</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Prada" onchange="toggleMarca(this)"><span class="check-label">Prada</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Ralph Lauren" onchange="toggleMarca(this)"><span class="check-label">Ralph Lauren</span><span class="sidebar-count">4</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Rasasi" onchange="toggleMarca(this)"><span class="check-label">Rasasi</span><span class="sidebar-count">7</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Rave" onchange="toggleMarca(this)"><span class="check-label">Rave</span><span class="sidebar-count">4</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Tommy Hilfiger" onchange="toggleMarca(this)"><span class="check-label">Tommy Hilfiger</span><span class="sidebar-count">4</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Tous" onchange="toggleMarca(this)"><span class="check-label">Tous</span><span class="sidebar-count">18</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Valentino" onchange="toggleMarca(this)"><span class="check-label">Valentino</span><span class="sidebar-count">11</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Versace" onchange="toggleMarca(this)"><span class="check-label">Versace</span><span class="sidebar-count">17</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Victorinox Swiss Army" onchange="toggleMarca(this)"><span class="check-label">Victorinox Swiss Army</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Viktor & Rolf" onchange="toggleMarca(this)"><span class="check-label">Viktor & Rolf</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="YSL" onchange="toggleMarca(this)"><span class="check-label">YSL</span><span class="sidebar-count">1</span></label>
+      <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Yves Saint Laurent" onchange="toggleMarca(this)"><span class="check-label">Yves Saint Laurent</span><span class="sidebar-count">5</span></label>
+          </div>
+        </div>
+        <button type="button" class="sidebar-showall" id="showAllBrandsBtn" onclick="toggleAllBrands()">Mostrar todas (49)</button>
+      </div>
+    </aside>
+    <div class="catalog-main">
   <div class="products-grid" id="productsGrid" role="list">
     <div class="empty-state" id="emptyState" role="status">
       <p>No se encontraron fragancias con ese filtro.</p>
@@ -6202,6 +6262,8 @@
 </div>
 <!-- CARDS:END -->
   </div><!-- /products-grid -->
+    </div><!-- /catalog-main -->
+  </div><!-- /catalog-layout -->
 </section><!-- /catalog-section -->
 
 <!-- ══ MINI-CART BAR ════════════════════════════════════════ -->
@@ -6490,7 +6552,8 @@ function pedirPorWhatsApp() {
 /* ─── FILTROS ────────────────────────────────────────────── */
 let filtroActivo = 'todos';
 let busquedaActiva = '';
-let generoActivo = 'todos';
+let tiposActivos = new Set();
+let marcasActivas = new Set();
 
 function _matchCat(card, cat) {
   if (cat === 'todos') return true;
@@ -6502,9 +6565,14 @@ function _matchCat(card, cat) {
   return false;
 }
 
-function _matchGenero(card, gen) {
-  if (gen === 'todos') return true;
-  return (card.dataset.tipo || '') === gen;
+function _matchGenero(card, tipos) {
+  if (tipos.size === 0) return true;
+  return tipos.has(card.dataset.tipo || '');
+}
+
+function _matchMarca(card, marcas) {
+  if (marcas.size === 0) return true;
+  return marcas.has(card.dataset.brand || '');
 }
 
 function _matchBusqueda(card, q) {
@@ -6518,7 +6586,7 @@ function _aplicarFiltros() {
   const cards = document.querySelectorAll('.products-grid .card');
   let visible = 0;
   cards.forEach(card => {
-    const show = _matchCat(card, filtroActivo) && _matchGenero(card, generoActivo) && _matchBusqueda(card, busquedaActiva);
+    const show = _matchCat(card, filtroActivo) && _matchGenero(card, tiposActivos) && _matchMarca(card, marcasActivas) && _matchBusqueda(card, busquedaActiva);
     card.style.display = show ? '' : 'none';
     if (show) visible++;
   });
@@ -6538,20 +6606,36 @@ function filtrarCategoria(cat, btn) {
   document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function filtrarGenero(gen, btn) {
-  generoActivo = gen;
-  document.querySelectorAll('.filter-gen').forEach(b => {
-    b.classList.toggle('active', b === btn);
-    b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-  });
+function toggleTipo(checkbox) {
+  const val = checkbox.value;
+  if (checkbox.checked) tiposActivos.add(val); else tiposActivos.delete(val);
   _aplicarFiltros();
-  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleMarca(checkbox) {
+  const val = checkbox.value;
+  if (checkbox.checked) marcasActivas.add(val); else marcasActivas.delete(val);
+  _aplicarFiltros();
+}
+
+function toggleAllBrands() {
+  const extra = document.getElementById('brandExtra');
+  const btn = document.getElementById('showAllBrandsBtn');
+  const isHidden = extra.hasAttribute('hidden');
+  if (isHidden) {
+    extra.removeAttribute('hidden');
+    btn.textContent = 'Mostrar menos';
+  } else {
+    extra.setAttribute('hidden', '');
+    btn.textContent = 'Mostrar todas (' + document.querySelectorAll('.marca-check').length + ')';
+  }
 }
 
 function irACategoria(gen) {
-  const btn = document.querySelector('.filter-gen[data-gen="' + gen + '"]');
-  if (btn) { filtrarGenero(gen, btn); }
-  else { document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  tiposActivos = new Set([gen]);
+  document.querySelectorAll('.tipo-check').forEach(cb => { cb.checked = (cb.value === gen); });
+  _aplicarFiltros();
+  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function filtrarBusqueda(q) {
