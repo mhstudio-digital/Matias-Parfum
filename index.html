@@ -76,6 +76,9 @@
   </ul>
 
   <div class="nav-actions">
+    <button class="nav-search-btn" id="navSearchBtn" aria-label="Buscar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
     <button class="nav-cart-btn" id="navCartBtn" onclick="abrirModal()" aria-label="Ver carrito">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       <span>Carrito</span>
@@ -86,6 +89,16 @@
     </button>
   </div>
 </header>
+<!-- ══ BUSCADOR INSTANTÁNEO ═════════════════════════════════ -->
+<div class="search-panel" id="searchPanel" aria-hidden="true">
+  <div class="search-panel-inner">
+    <svg class="search-panel-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="globalSearchInput" placeholder="Buscar perfume, marca…" autocomplete="off" aria-label="Buscar perfume o marca">
+    <button class="search-panel-close" id="searchPanelClose" aria-label="Cerrar búsqueda">×</button>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
 
 <!-- ══ HERO ═════════════════════════════════════════════════ -->
 <main>
@@ -835,6 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script src="/search.js" defer></script>
 </body>
 </html>
 
