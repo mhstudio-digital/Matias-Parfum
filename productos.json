@@ -877,7 +877,7 @@
     "concentracion": "EDP",
     "precio": 45000,
     "precioDesde": false,
-    "imagen": "img/WANTEDEDPN.png",
+    "imagen": "img/WANTEDEDPn.png",
     "notas": [
       "Madera",
       "Cuero",
@@ -901,7 +901,7 @@
     "concentracion": "EDP",
     "precio": 35000,
     "precioDesde": false,
-    "imagen": "img/CHROMEEDPN.png",
+    "imagen": "img/CHROMEEDPn.png",
     "notas": [
       "Bergamota",
       "Menta",
@@ -1189,7 +1189,7 @@
     "concentracion": "EDP",
     "precio": 120000,
     "precioDesde": false,
-    "imagen": "img/SAUVAGEDP.jpg",
+    "imagen": "img/SAUVAGEEDP.jpg",
     "notas": [
       "Pimienta",
       "Ambroxan",
@@ -1333,7 +1333,7 @@
     "concentracion": "EDP",
     "precio": 80000,
     "precioDesde": false,
-    "imagen": "img/MYSLFEFLP.jpg",
+    "imagen": "img/MYSLFEDP.jpg",
     "notas": [
       "Bergamota",
       "Lavanda",
@@ -1669,7 +1669,7 @@
     "concentracion": "EDP",
     "precio": 20000,
     "precioDesde": false,
-    "imagen": "img/ODYSSEYLIMON.jpg",
+    "imagen": "img/ODYSSEYLIMONI.jpg",
     "notas": [
       "Limón",
       "Bergamota",
@@ -2461,7 +2461,7 @@
     "concentracion": "EDP",
     "precio": 73000,
     "precioDesde": false,
-    "imagen": "img/VALENTINOFLONNA.png",
+    "imagen": "img/VALENTINODONNA.png",
     "notas": [
       "Rosa",
       "Iris",
@@ -4645,7 +4645,7 @@
     "concentracion": "EDP",
     "precio": 30000,
     "precioDesde": false,
-    "imagen": "img/TOFFECOFFEE.png",
+    "imagen": "img/TOFFEECOFFEE.png",
     "notas": [
       "Café",
       "Caramelo",
@@ -5029,7 +5029,7 @@
     "concentracion": "EDP",
     "precio": 19500,
     "precioDesde": false,
-    "imagen": "img/OUDFORGOLRY.png",
+    "imagen": "img/OUDFORGLORY.png",
     "notas": [
       "Oud",
       "Bergamota",
@@ -5173,7 +5173,7 @@
     "concentracion": "EDP",
     "precio": 19000,
     "precioDesde": false,
-    "imagen": "img/HAYAATIALALEKY.png",
+    "imagen": "img/HAYAATIALMALEKY.png",
     "notas": [
       "Oud",
       "Ámbar",
@@ -6721,7 +6721,7 @@
     "concentracion": "EDP",
     "precio": 35000,
     "precioDesde": false,
-    "imagen": "img/VENTANA POUR HOMME 100ML EDP HOMBRE ARMAF ÁRABES.jpg",
+    "imagen": "img/VENTANA POUR HOMME 100ML EDP HOMBRE ARMAF  ÁRABES.jpg",
     "notas": [],
     "intensidad": 4,
     "duracion": "8 horas",
