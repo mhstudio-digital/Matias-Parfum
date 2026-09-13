@@ -303,7 +303,15 @@ input,select { font-family:var(--sans) }
 .catalog-sidebar {
   flex:0 0 220px;
   position:sticky; top:90px;
+  max-height:calc(100vh - 110px);
+  overflow-y:auto;
+  padding-right:8px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--line) transparent;
 }
+.catalog-sidebar::-webkit-scrollbar { width:6px }
+.catalog-sidebar::-webkit-scrollbar-track { background:transparent }
+.catalog-sidebar::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px }
 .sidebar-group { margin-bottom:32px }
 .sidebar-title {
   font-size:11px; letter-spacing:.2em; text-transform:uppercase;
@@ -329,7 +337,7 @@ input,select { font-family:var(--sans) }
 .catalog-main { flex:1; min-width:0 }
 @media (max-width:900px) {
   .catalog-layout { flex-direction:column; gap:24px }
-  .catalog-sidebar { position:static; width:100%; flex-basis:auto }
+  .catalog-sidebar { position:static; width:100%; flex-basis:auto; max-height:none; overflow-y:visible }
   .sidebar-group { margin-bottom:0 }
   .sidebar-group + .sidebar-group { margin-top:20px }
 }
