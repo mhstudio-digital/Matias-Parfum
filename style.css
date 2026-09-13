@@ -199,18 +199,18 @@ input,select { font-family:var(--sans) }
 
 /* ── CATEGORIAS ────────────────────────────────────────── */
 .categorias-section {
-  background:#F1EEE8;
+  background:var(--bg);
   padding:96px var(--pad) 104px;
 }
 .categorias-inner { max-width:var(--max); margin:0 auto; text-align:center }
 .categorias-eye {
   font-size:10px; letter-spacing:.42em; text-transform:uppercase;
-  color:#9c8a63; margin-bottom:10px;
+  color:var(--gold); margin-bottom:10px;
 }
 .categorias-h {
   font-family:var(--serif); font-weight:400; font-style:italic;
   font-size:clamp(32px,4vw,52px);
-  color:#1c1812; line-height:1.1;
+  color:var(--cream); line-height:1.1;
   margin-bottom:52px;
 }
 .categorias-grid {
