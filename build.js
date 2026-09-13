@@ -5,6 +5,31 @@ const ejs = require('ejs');
 const ROOT = __dirname;
 const productos = require(path.join(ROOT, 'productos.json'));
 
+// ---------- Selección "Los más buscados" (curada a mano) ----------
+// Fragancias de reconocimiento mundial (más buscadas/vendidas a nivel
+// internacional según el mercado de perfumería), filtradas a las que
+// realmente están en nuestro catálogo. Actualizar esta lista a mano si
+// se quiere cambiar la selección.
+const DESTACADOS_SLUGS = [
+  'christian-dior-sauvage-200ml-edp',
+  'yves-saint-laurent-black-opium-90ml-edp',
+  'jean-paul-gaultier-le-male-100ml-edt',
+  'giorgio-armani-acqua-di-gio-100ml-edt',
+  'paco-rabanne-one-million-edt',
+  'versace-eros-100ml-edt',
+  'dior-jadore-100ml-edp',
+  'carolina-herrera-212-vip-black-100ml-edp',
+];
+
+// ---------- Selección "Recién Llegados" (curada a mano) ----------
+// Productos que acaban de sumarse al catálogo. Actualizar esta lista
+// a mano cada vez que lleguen fragancias nuevas.
+const NUEVOS_INGRESOS_SLUGS = [
+  'paco-rabanne-phantom-in-red-100ml-parfum',
+  'paco-rabanne-fame-in-love-80ml-parfum',
+  'versace-dylan-blush-pink-100ml-edp',
+];
+
 const cardTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'card.ejs'), 'utf8');
 const productoTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'producto.ejs'), 'utf8');
 
@@ -38,11 +63,69 @@ function viewCard(p) {
     familia: p.familia,
     intensidad: p.intensidad,
     duracionHoras: horasDe(p.duracion),
-    imagen: p.imagen,
     notasTexto: p.notas.join(' · '),
     precioTexto: (p.precioDesde ? 'Desde ' : '') + '₡' + conMiles(p.precio, ','),
-    hrefProducto: 'productos/' + p.slug + '.html',
+    // Rutas absolutas (con "/" inicial): así la card funciona igual embebida
+    // en index.html (raíz) que en productos/{slug}.html (subcarpeta) — p. ej.
+    // en la sección de "Productos relacionados" dentro de cada ficha.
+    hrefProducto: '/productos/' + p.slug + '.html',
+    imagen: '/' + p.imagen,
   };
+}
+
+// ---------- Productos relacionados ("también te puede interesar") ----------
+// Similitud por familia olfativa, marca, notas compartidas y cercanía de
+// precio. Se prioriza variedad de marca (máx. 1 repetida en el primer
+// intento) para no llenar la sección solo con variantes del mismo perfume,
+// pero se relaja el criterio en cascada hasta completar siempre 4 resultados.
+function scoreSimilitud(a, b) {
+  let score = 0;
+  if (a.familia === b.familia) score += 4;
+  if (a.marca === b.marca) score += 3;
+  const notasB = new Set(b.notas);
+  const overlap = a.notas.filter(n => notasB.has(n)).length;
+  score += Math.min(overlap, 3);
+  const priceDiff = Math.abs(a.precio - b.precio) / a.precio;
+  if (priceDiff < 0.15) score += 1;
+  else if (priceDiff < 0.3) score += 0.5;
+  return score;
+}
+function relacionados(p, all, n = 4) {
+  const generoCompatible = x => x.slug !== p.slug &&
+    (x.genero === p.genero || x.genero === 'unisex' || p.genero === 'unisex');
+  let pool = all.filter(generoCompatible);
+  if (pool.length < n) pool = all.filter(x => x.slug !== p.slug);
+
+  const scored = pool.map(x => ({ x, s: scoreSimilitud(p, x) }));
+  scored.sort((A, B) => {
+    if (B.s !== A.s) return B.s - A.s;
+    const dA = Math.abs(p.precio - A.x.precio), dB = Math.abs(p.precio - B.x.precio);
+    if (dA !== dB) return dA - dB;
+    return A.x.slug.localeCompare(B.x.slug);
+  });
+
+  const intentos = [
+    { cap: 1, minScore: 2 },
+    { cap: 2, minScore: 2 },
+    { cap: 2, minScore: 0 },
+    { cap: n, minScore: 0 },
+  ];
+  for (const { cap, minScore } of intentos) {
+    const elegidos = [];
+    const porMarca = {};
+    for (const item of scored) {
+      if (item.s < minScore) continue;
+      const m = item.x.marca;
+      porMarca[m] = porMarca[m] || 0;
+      if (porMarca[m] < cap) {
+        elegidos.push(item);
+        porMarca[m]++;
+      }
+      if (elegidos.length === n) break;
+    }
+    if (elegidos.length === n) return elegidos.map(o => o.x);
+  }
+  return scored.slice(0, n).map(o => o.x);
 }
 
 // ---------- Preparar view-model de cada página de producto ----------
@@ -87,6 +170,9 @@ function viewProducto(p) {
     intensidad: p.intensidad,
     duracionHoras: horasDe(p.duracion),
     sizeParaMensaje: sizeParaMensaje(p['tamaño']),
+    relacionadosHtml: relacionados(p, productos)
+      .map(rp => ejs.render(cardTemplate, { p: viewCard(rp) }).trim())
+      .join('\n'),
   };
 }
 
@@ -110,6 +196,32 @@ const cardsHtml = productos
   .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
   .join('\n');
 
+// ---------- Generar el bloque de "Los más buscados" ----------
+const destacados = DESTACADOS_SLUGS
+  .map(slug => {
+    const p = productos.find(prod => prod.slug === slug);
+    if (!p) console.warn(`Aviso: slug destacado "${slug}" no existe en productos.json, se omite.`);
+    return p;
+  })
+  .filter(Boolean);
+
+const destacadosHtml = destacados
+  .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
+  .join('\n');
+
+// ---------- Generar el bloque de "Recién Llegados" ----------
+const nuevosIngresos = NUEVOS_INGRESOS_SLUGS
+  .map(slug => {
+    const p = productos.find(prod => prod.slug === slug);
+    if (!p) console.warn(`Aviso: slug de nuevo ingreso "${slug}" no existe en productos.json, se omite.`);
+    return p;
+  })
+  .filter(Boolean);
+
+const nuevosIngresosHtml = nuevosIngresos
+  .map(p => ejs.render(cardTemplate, { p: viewCard(p) }).trim())
+  .join('\n');
+
 const inicioMarcador = '<!-- CARDS:START -->';
 const finMarcador = '<!-- CARDS:END -->';
 const inicioIdx = indexHtml.indexOf(inicioMarcador);
@@ -122,18 +234,111 @@ indexHtml =
   '\n' + cardsHtml + '\n' +
   indexHtml.slice(finIdx);
 
+const inicioDestMarcador = '<!-- DESTACADOS:START -->';
+const finDestMarcador = '<!-- DESTACADOS:END -->';
+const inicioDestIdx = indexHtml.indexOf(inicioDestMarcador);
+const finDestIdx = indexHtml.indexOf(finDestMarcador);
+if (inicioDestIdx === -1 || finDestIdx === -1) {
+  throw new Error('No se encontraron los marcadores DESTACADOS:START / DESTACADOS:END en index.html');
+}
+indexHtml =
+  indexHtml.slice(0, inicioDestIdx + inicioDestMarcador.length) +
+  '\n' + destacadosHtml + '\n' +
+  indexHtml.slice(finDestIdx);
+
+const inicioNuevosMarcador = '<!-- NUEVOS:START -->';
+const finNuevosMarcador = '<!-- NUEVOS:END -->';
+const inicioNuevosIdx = indexHtml.indexOf(inicioNuevosMarcador);
+const finNuevosIdx = indexHtml.indexOf(finNuevosMarcador);
+if (inicioNuevosIdx === -1 || finNuevosIdx === -1) {
+  throw new Error('No se encontraron los marcadores NUEVOS:START / NUEVOS:END en index.html');
+}
+indexHtml =
+  indexHtml.slice(0, inicioNuevosIdx + inicioNuevosMarcador.length) +
+  '\n' + nuevosIngresosHtml + '\n' +
+  indexHtml.slice(finNuevosIdx);
+
 // ---------- Actualizar el contador de fragancias ("230" -> productos.length) ----------
 // El contador vive como texto plano ("Más de 230 fragancias", stat-num "230+")
 // fuera del bloque de cards, así que se reemplaza ANTES de haber insertado las
 // cards nuevas para no tocar por accidente un precio que contenga "230".
 const antesDeCards = indexHtml.slice(0, indexHtml.indexOf(inicioMarcador));
 const desdeCardsEnAdelante = indexHtml.slice(indexHtml.indexOf(inicioMarcador));
-const antesActualizado = antesDeCards.split('230').join(String(productos.length));
+const antesActualizado = (() => { let done = false; return antesDeCards.replace(/Más de \d{2,4} fragancias/g, `Más de ${productos.length} fragancias`).replace(/(class="stat-num">)\d{2,4}(<span)/g, (m,p1,p2) => done ? m : (done = true, `${p1}${productos.length}${p2}`)); })();
 indexHtml = antesActualizado + desdeCardsEnAdelante;
 
 fs.writeFileSync(indexPath, indexHtml, 'utf8');
+
+// ---------- Generar sitemap.xml ----------
+// Incluye la home y las páginas de TODOS los productos (antes era una lista
+// curada a mano con solo 38/242). Prioridad más alta para los slugs
+// destacados en DESTACADOS_SLUGS.
+function xmlEscape(s) {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+const hoy = new Date().toISOString().slice(0, 10);
+const sitemapUrls = [
+  `  <url>\n    <loc>https://matiasparfum.com/</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>`,
+  ...productos.map(p => {
+    const esDestacado = DESTACADOS_SLUGS.includes(p.slug);
+    const priority = esDestacado ? '0.9' : '0.8';
+    return `  <url>\n    <loc>https://matiasparfum.com/productos/${xmlEscape(p.slug)}.html</loc>\n    <changefreq>monthly</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  }),
+];
+const sitemapXml =
+  '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n' +
+  sitemapUrls.join('\n\n') +
+  '\n\n</urlset>\n';
+fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml, 'utf8');
+
+// ---------- Generar feed de Google Shopping (Merchant Center) ----------
+// Formato RSS 2.0 con namespace g: que espera Google. Sin GTIN/MPN propios
+// (no tenemos ese dato de fábrica), así que declaramos identifier_exists=no
+// para que Google no rechace el ítem por falta de identificador único.
+function xmlEscapeFull(s) {
+  return (s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+const categoriaGoogle = 'Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Perfume &amp; Cologne';
+const feedItems = productos.map(p => {
+  const link = `https://matiasparfum.com/productos/${p.slug}.html`;
+  const imageLink = urlImagenAbsoluta(p.imagen);
+  return [
+    '  <item>',
+    `    <g:id>${xmlEscapeFull(p.slug)}</g:id>`,
+    `    <title>${xmlEscapeFull(p.tituloCard)}</title>`,
+    `    <description>${xmlEscapeFull(p.descripcion)}</description>`,
+    `    <link>${link}</link>`,
+    `    <g:image_link>${imageLink}</g:image_link>`,
+    '    <g:availability>in stock</g:availability>',
+    `    <g:price>${p.precio} CRC</g:price>`,
+    `    <g:brand>${xmlEscapeFull(p.marca)}</g:brand>`,
+    '    <g:condition>new</g:condition>',
+    '    <g:identifier_exists>no</g:identifier_exists>',
+    `    <g:google_product_category>${categoriaGoogle}</g:google_product_category>`,
+    '  </item>',
+  ].join('\n');
+});
+const feedXml =
+  '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n' +
+  '<channel>\n' +
+  '  <title>Matías Parfum</title>\n' +
+  '  <link>https://matiasparfum.com</link>\n' +
+  '  <description>Perfumes 100% originales en Costa Rica</description>\n\n' +
+  feedItems.join('\n\n') +
+  '\n\n</channel>\n' +
+  '</rss>\n';
+fs.writeFileSync(path.join(ROOT, 'google-shopping-feed.xml'), feedXml, 'utf8');
 
 console.log(`Productos procesados: ${productos.length}`);
 console.log(`Páginas generadas en productos/: ${paginasGeneradas}`);
 console.log(`Cards inyectadas en index.html: ${productos.length}`);
 console.log(`Contador de fragancias actualizado a: ${productos.length}`);
+console.log(`Destacados ("más buscados") inyectados: ${destacados.length}/${DESTACADOS_SLUGS.length}`);
+console.log(`Nuevos ingresos inyectados: ${nuevosIngresos.length}/${NUEVOS_INGRESOS_SLUGS.length}`);
+console.log(`Sitemap generado con ${sitemapUrls.length} URLs (antes: 39, ahora: home + ${productos.length} productos)`);
+console.log(`Feed de Google Shopping generado con ${feedItems.length} productos`);

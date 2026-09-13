@@ -111,7 +111,25 @@
   </section>
 </div>
 
+<!-- ══ RELACIONADOS ════════════════════════════════════════════ -->
+<% if (p.relacionadosHtml) { %>
+<section class="catalog-section relacionados-section" aria-labelledby="relacionados-heading">
+  <p class="section-eye">También te puede interesar</p>
+  <h2 class="section-h" id="relacionados-heading">Perfumes <em>similares</em>.</h2>
+  <div class="products-grid" role="list">
+<%- p.relacionadosHtml %>
+  </div>
+</section>
+<% } %>
+
 <script>
+  // Usada por el botón "Consultar por WhatsApp" de las cards de la sección
+  // de productos relacionados (mismo comportamiento que en index.html).
+  function consultarPerfume(nombre) {
+    const msg = 'Hola! Me interesa el perfume: ' + nombre;
+    window.open('https://wa.me/50683674466?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  }
+
   const PRICE = parseInt(document.getElementById('priceDisplay').dataset.price, 10);
   let qty = 1;
 
