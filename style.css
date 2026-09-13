@@ -921,3 +921,32 @@ input,select { font-family:var(--sans) }
   .pp-specs { grid-template-columns:1fr 1fr }
   .pp-spec:last-child { grid-column:1/-1 }
 }
+
+/* ══ Botón flotante de WhatsApp ══════════════════════════════ */
+.wa-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--wa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 0 rgba(37,211,102,.5);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+  animation: wa-pulse 2.6s ease-out infinite;
+}
+.wa-float:hover { transform: scale(1.08); }
+.wa-float svg { width: 30px; height: 30px; fill: #fff; }
+@keyframes wa-pulse {
+  0%   { box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 0 rgba(37,211,102,.45); }
+  70%  { box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 14px rgba(37,211,102,0); }
+  100% { box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 0 rgba(37,211,102,0); }
+}
+@media (max-width:600px) {
+  .wa-float { right:14px; bottom:14px; width:50px; height:50px; }
+  .wa-float svg { width:26px; height:26px; }
+}
