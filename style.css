@@ -749,7 +749,11 @@ input,select { font-family:var(--sans) }
   .quiz-result-grid { grid-template-columns:repeat(2,1fr) }
   .nav-links { display:none }
   .nav-hamburger { display:flex }
-  .nav-cart-btn span:not(.cart-count) { display:none }
+  .nav-cart-btn span:not(.cart-count),
+  .nav-fav-btn span:not(.fav-count),
+  .nav-compare-btn span:not(.compare-count) { display:none }
+  .nav-cart-btn, .nav-fav-btn, .nav-compare-btn { padding:9px 10px }
+  .nav-actions { gap:4px }
 }
 @media (max-width:600px) {
   .filter-cats { gap:0; flex-wrap:wrap }
@@ -1252,6 +1256,21 @@ input,select { font-family:var(--sans) }
 .pp-topbar-icon:hover { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
 .pp-topbar-icon svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.5 }
 .pp-topbar-icon .cart-count, .pp-topbar-icon .fav-count { position:absolute; top:-4px; right:-4px }
+
+/* Topbar de ficha de producto en móvil: logo + WhatsApp + 3 íconos
+   no caben en una fila sin achicarse (antes se cortaban/superponían) */
+@media (max-width:600px) {
+  .pp-topbar { padding:0 16px }
+  .pp-topbar-wa { padding:11px; gap:0; font-size:0 }
+  .pp-topbar-wa svg { width:17px; height:17px }
+  .pp-topbar-icons { gap:6px }
+  .pp-topbar-icon { width:34px; height:34px }
+  .pp-topbar-icon svg { width:15px; height:15px }
+}
+@media (max-width:360px) {
+  .pp-logo { font-size:14px }
+  .pp-topbar { padding:0 12px }
+}
 
 /* Toast de confirmación (agregado al carrito / favoritos) */
 .mp-toast {
