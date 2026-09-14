@@ -704,7 +704,7 @@ input,select { font-family:var(--sans) }
 }
 .footer-inner {
   max-width:var(--max); margin:0 auto;
-  display:grid; grid-template-columns:1.6fr 1fr 1fr;
+  display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr;
   gap:60px; margin-bottom:52px;
 }
 .footer-brand-name {
@@ -1360,4 +1360,24 @@ input,select { font-family:var(--sans) }
    el orden de aparición, no el media query.) */
 @media (max-width:600px) {
   .nav-compare-btn, .nav-fav-btn { display:none }
+}
+
+/* ══ Páginas legales (Términos, Privacidad, Cambios y devoluciones) ══ */
+.legal-content { max-width:760px }
+.legal-content h2 {
+  font-family:var(--serif); font-size:22px; font-weight:400;
+  color:var(--cream); margin:40px 0 14px;
+}
+.legal-content h2:first-child { margin-top:0 }
+.legal-content p, .legal-content li {
+  font-size:14.5px; color:var(--stone); line-height:1.85; margin-bottom:14px;
+}
+.legal-content ul { padding-left:20px; margin-bottom:14px }
+.legal-content li { margin-bottom:8px }
+.legal-content strong { color:var(--cream); font-weight:500 }
+.legal-content a { color:var(--gold-lt); text-decoration:underline; text-underline-offset:2px }
+.legal-updated { font-size:12px; color:var(--stone-dim); margin-bottom:40px; display:block }
+.legal-fill {
+  background:var(--gold-dim); color:var(--gold-lt); border:1px dashed var(--gold-line);
+  padding:1px 6px; border-radius:3px; font-size:13px;
 }
