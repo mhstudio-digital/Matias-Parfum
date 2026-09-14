@@ -4,7 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-Matías Parfum es un catálogo e-commerce para una perfumería en Costa Rica. El sitio publicado sigue siendo HTML/CSS/JS estático servido por GitHub Pages (`matiasparfum.com`, dominio vía `CNAME`), pero **ya no se edita a mano**: `index.html` (el bloque de cards) y las 239 páginas de `productos/` se generan con `node build.js` a partir de una única fuente de datos, `productos.json`. Ver `README-DEV.md` para el flujo de edición día a día.
+Matías Parfum es un catálogo e-commerce para una perfumería en Costa Rica. El sitio publicado sigue siendo HTML/CSS/JS estático servido por GitHub Pages (`matiasparfum.com`, dominio vía `CNAME`). En teoría `index.html` (el bloque de cards) y las páginas de `productos/` se generan con `node build.js` a partir de `productos.json` — pero ver la advertencia de abajo antes de confiar en eso. Ver `README-DEV.md` para el flujo de edición día a día que describe ese diseño original.
+
+## ⚠️ `npm run build` está roto / desactualizado — NO correrlo sin antes leer esto (2026-09-14)
+
+Verificado el 2026-09-14: correr `npm run build` en este momento **destruye funciones reales del sitio** en las 239+ páginas de `productos/`. El script regenera esas páginas desde `templates/producto.ejs`, pero esa plantilla quedó vieja respecto a lo que hoy vive en las páginas publicadas — le faltan: el Meta Pixel (instalado a mano en un commit posterior a la plantilla), el botón flotante de WhatsApp, los íconos de favoritos/carrito, y el comparador de productos. Además, a `index.html` le faltan los comentarios marcadores `<!-- CARDS:START -->` / `<!-- CARDS:END -->` que el script necesita para inyectar las cards, así que el build ni siquiera termina — tira `Error: No se encontraron los marcadores CARDS:START / CARDS:END`.
+
+**Mientras esto no se arregle:**
+- No corras `npm run build` "para estar seguro" o como parte de un flujo de rutina. Si lo corrés sin querer, NO hagas commit — revisá `git status`/`git diff` primero y descartá los cambios en `productos/*.html` e `index.html` si tocó de más.
+- Para agregar o editar un producto: editá `productos.json` a mano (es JSON simple, un objeto por producto, ver esquema abajo) y para reflejarlo en las páginas HTML, editá directamente los archivos generados (`index.html` entre los comentarios de cards si existen, y `productos/{slug}.html`) con ediciones quirúrgicas — no regenerando todo. Es más manual, pero no rompe nada.
+- Arreglo real pendiente (para cuando alguien tenga tiempo): actualizar `templates/producto.ejs` y `templates/card.ejs` para que incluyan Meta Pixel + WhatsApp float + favoritos/carrito + comparador (copiando el HTML real de una página ya publicada), y volver a poner los marcadores `CARDS:START`/`CARDS:END` en `index.html`. Recién ahí `npm run build` vuelve a ser confiable.
 
 ## Development
 
@@ -17,13 +26,14 @@ npm install
 ```
 npm run build
 ```
+⚠️ Ver advertencia arriba — actualmente esto rompe páginas de producto. No usar hasta arreglar las plantillas.
 
 **Preview local** — abrí `index.html` directo en el navegador, o serví con cualquier static server:
 ```
 npx serve .
 ```
 
-**Deploy** — corré `npm run build`, revisá el `git diff`, y hacé push; GitHub Pages se encarga del resto.
+**Deploy** — editá los archivos a mano (ver advertencia arriba), revisá el `git diff` con cuidado, y hacé push; GitHub Pages se encarga del resto.
 
 No hay tests ni linters.
 
