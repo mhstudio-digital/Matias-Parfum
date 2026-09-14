@@ -97,6 +97,11 @@
     <button class="nav-search-btn" id="navSearchBtn" aria-label="Buscar" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
+    <button class="nav-compare-btn" id="navCompareBtn" onclick="mpAbrirCompareModal()" aria-label="Ver comparador">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="16" rx="1"/><rect x="13" y="4" width="8" height="16" rx="1"/></svg>
+      <span>Comparar</span>
+      <span class="compare-count" id="compareCount" data-compare-count aria-live="polite">0</span>
+    </button>
     <button class="nav-fav-btn" id="navFavBtn" onclick="toggleFavoritosView()" aria-label="Ver favoritos" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.3-8.28C1.02 10.2 1.6 6.9 4.2 5.3c2.2-1.36 4.86-.77 6.3 1.2.5.68.9 1.3 1.5 1.3.6 0 1-.62 1.5-1.3 1.44-1.97 4.1-2.56 6.3-1.2 2.6 1.6 3.18 4.9 1.5 7.42C18.7 16.65 12 21 12 21z"/></svg>
       <span>Favoritos</span>
@@ -6605,6 +6610,24 @@
   </div>
 </div>
 
+<!-- ══ COMPARE MODAL ════════════════════════════════════════ -->
+<div class="modal-bg" id="compareModalBg" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle" onclick="if(event.target===this) mpCerrarCompareModal()">
+  <div class="modal compare-modal" role="document">
+    <div class="modal-header">
+      <h2 class="modal-title" id="compareModalTitle">Comparar perfumes</h2>
+      <button class="modal-close" onclick="mpCerrarCompareModal()" aria-label="Cerrar comparador">✕</button>
+    </div>
+    <div class="modal-items compare-body" id="compareModalBody" role="list">
+      <div class="modal-empty">
+        <p>No agregaste productos para comparar.</p>
+      </div>
+    </div>
+    <div class="modal-footer" id="compareModalFooter" style="display:none">
+      <button class="modal-clear" onclick="mpClearCompare()" aria-label="Vaciar comparador">Vaciar comparación</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ QUIZ / PERFUME FINDER (oculto temporalmente, código intacto) ══════════════════════════════════════════════════
 <section class="quiz-section" id="quiz" aria-labelledby="quiz-heading">
   <div class="quiz-inner">
@@ -7108,6 +7131,27 @@ document.addEventListener('DOMContentLoaded', () => {
       favBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.3-8.28C1.02 10.2 1.6 6.9 4.2 5.3c2.2-1.36 4.86-.77 6.3 1.2.5.68.9 1.3 1.5 1.3.6 0 1-.62 1.5-1.3 1.44-1.97 4.1-2.56 6.3-1.2 2.6 1.6 3.18 4.9 1.5 7.42C18.7 16.65 12 21 12 21z"/></svg>';
       favBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); mpToggleFav(favBtn); });
       card.appendChild(favBtn);
+
+      const compareBtn = document.createElement('button');
+      compareBtn.type = 'button';
+      compareBtn.className = 'compare-btn';
+      compareBtn.dataset.href = href;
+      compareBtn.setAttribute('aria-label', `Comparar ${card.dataset.nombre || ''}`);
+      compareBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="16" rx="1"/><rect x="13" y="4" width="8" height="16" rx="1"/></svg>';
+      compareBtn.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        mpToggleCompare(compareBtn, {
+          href: href,
+          nombre: card.dataset.nombre || '',
+          brand: card.dataset.brand || '',
+          img: card.querySelector('img')?.getAttribute('src') || '',
+          precio: _getPrecioNum(card),
+          familia: card.dataset.familia || '',
+          intensidad: card.dataset.intensidad || '',
+          duracion: card.dataset.duracion || ''
+        });
+      });
+      card.appendChild(compareBtn);
     }
 
   });

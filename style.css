@@ -1263,3 +1263,64 @@ input,select { font-family:var(--sans) }
   transition:opacity .25s var(--ease2), transform .25s var(--ease2);
 }
 .mp-toast.show { opacity:1; transform:translate(-50%,0) }
+
+/* ══ Comparador de perfumes ═══════════════════════════════════ */
+.compare-btn {
+  position:absolute; top:10px; left:10px; z-index:3;
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(10,9,8,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(201,169,110,.25); color:#fff;
+  transition:background .25s, border-color .25s, color .25s, transform .2s var(--ease);
+}
+.compare-btn:hover { border-color:var(--gold); transform:scale(1.08) }
+.compare-btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.6 }
+.compare-btn.is-compare { color:var(--gold); border-color:var(--gold); background:var(--gold-dim) }
+
+.nav-compare-btn {
+  position:relative;
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--stone-dim);
+  border:1px solid transparent;
+  padding:9px 18px;
+  transition:color .25s, border-color .25s, background .25s;
+}
+.nav-compare-btn:hover { color:var(--gold); border-color:var(--line); background:var(--gold-dim) }
+.nav-compare-btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.5 }
+.compare-count {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:18px; height:18px;
+  background:var(--gold); color:var(--bg);
+  border-radius:9px; font-size:9px; font-weight:600; padding:0 4px;
+  opacity:0; transform:scale(0);
+  transition:opacity .2s var(--ease2), transform .2s var(--ease2);
+}
+.compare-count.show { opacity:1; transform:scale(1) }
+
+.compare-modal { max-width:min(94vw, 820px) }
+.compare-body { overflow-x:auto }
+.compare-table { width:100%; border-collapse:collapse; font-size:13px }
+.compare-table th, .compare-table td {
+  padding:12px 14px; text-align:left; border-bottom:1px solid var(--line);
+  vertical-align:middle; white-space:nowrap;
+}
+.compare-table th {
+  color:var(--stone-dim); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  white-space:normal; width:90px;
+}
+.compare-table td img { width:64px; height:80px; object-fit:contain; background:#0a0908; padding:4px; display:block }
+.compare-remove {
+  margin-top:6px; font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--stone-dim); border:1px solid var(--line); padding:4px 8px; background:transparent;
+}
+.compare-remove:hover { color:var(--gold); border-color:var(--gold-line) }
+
+.pp-compare-btn {
+  flex-shrink:0; width:52px;
+  display:flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--line); color:var(--stone-dim);
+  transition:color .25s, border-color .25s, background .25s;
+}
+.pp-compare-btn svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5 }
+.pp-compare-btn.is-compare { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
