@@ -31,6 +31,27 @@
   <meta name="twitter:card"       content="summary_large_image" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Versace Eros Najim 100ML PARFUM","brand":{"@type":"Brand","name":"Versace"},"offers":{"@type":"Offer","priceCurrency":"CRC","price":"55000","availability":"https://schema.org/InStock","seller":{"@type":"Organization","name":"Matías Parfum"}},"image":"https://matiasparfum.com/img/Najim.webp","description":"Versace Eros Najim 100ML PARFUM 100% original en Costa Rica. Familia Acuático. Notas: Menta, Lima y Vainilla."}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://matiasparfum.com/"}, {"@type": "ListItem", "position": 2, "name": "Hombre", "item": "https://matiasparfum.com/catalogo.html?tipo=Hombre"}, {"@type": "ListItem", "position": 3, "name": "Versace"}, {"@type": "ListItem", "position": 4, "name": "Eros NAJIM", "item": "https://matiasparfum.com/productos/versace-eros-najim-100ml-parfum.html"}]}</script>
+  <script>
+  (function () {
+    var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+    var data = null;
+    for (var i = 0; i < scripts.length; i++) {
+      try {
+        var d = JSON.parse(scripts[i].textContent);
+        if (d && d['@type'] === 'Product') { data = d; break; }
+      } catch (e) {}
+    }
+    if (!data || typeof fbq !== 'function') return;
+    fbq('track', 'ViewContent', {
+      content_name: data.name,
+      content_category: (data.brand && data.brand.name) || '',
+      content_ids: [location.pathname],
+      content_type: 'product',
+      value: parseInt((data.offers && data.offers.price) || 0, 10),
+      currency: (data.offers && data.offers.priceCurrency) || 'CRC'
+    });
+  })();
+  </script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuánto cuesta el Versace Eros Najim 100ML PARFUM?", "acceptedAnswer": {"@type": "Answer", "text": "El Versace Eros Najim 100ML PARFUM cuesta ₡55,000 en Matías Parfum, con envío a todo Costa Rica. Consultá disponibilidad por WhatsApp."}}, {"@type": "Question", "name": "¿Es original el Versace Eros Najim 100ML PARFUM?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, el Versace Eros Najim 100ML PARFUM es 100% original. Trabajamos directamente con distribuidores autorizados para garantizar su autenticidad."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

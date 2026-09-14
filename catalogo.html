@@ -6798,6 +6798,16 @@ function agregarAlCarrito(card) {
   card.classList.add('adding');
   setTimeout(() => card.classList.remove('adding'), 500);
   _guardar();
+
+  if (typeof fbq === 'function') {
+    fbq('track', 'AddToCart', {
+      content_name: nombre,
+      content_category: brand,
+      content_type: 'product',
+      value: precio,
+      currency: 'CRC'
+    });
+  }
 }
 
 function cambiarCantidad(idx, delta) {

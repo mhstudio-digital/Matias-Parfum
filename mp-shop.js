@@ -105,6 +105,17 @@
     else cart.push({ nombre: nombre, brand: brand, img: img, precio: precio, qty: qty });
     saveCart(cart);
     showToast('Agregado al carrito 🛒');
+
+    if (typeof fbq === 'function') {
+      fbq('track', 'AddToCart', {
+        content_name: nombre,
+        content_category: brand,
+        content_ids: [location.pathname],
+        content_type: 'product',
+        value: precio * qty,
+        currency: 'CRC'
+      });
+    }
   };
 
   /* ─── Comparador ─────────────────────────────────────────── */

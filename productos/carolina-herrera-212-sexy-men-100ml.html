@@ -31,6 +31,27 @@
   <meta name="twitter:card"       content="summary_large_image" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Carolina Herrera 212 Sexy Men 100ML","brand":{"@type":"Brand","name":"Carolina Herrera"},"offers":{"@type":"Offer","priceCurrency":"CRC","price":"41000","availability":"https://schema.org/InStock","seller":{"@type":"Organization","name":"Matías Parfum"}},"image":"https://matiasparfum.com/img/212SEXYMEN12.webp","description":"Carolina Herrera 212 Sexy Men 100ML 100% original en Costa Rica. Familia Chypre Floral. Notas: Cedro, Bergamota y Cuero."}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://matiasparfum.com/"}, {"@type": "ListItem", "position": 2, "name": "Hombre", "item": "https://matiasparfum.com/catalogo.html?tipo=Hombre"}, {"@type": "ListItem", "position": 3, "name": "Carolina Herrera"}, {"@type": "ListItem", "position": 4, "name": "212 Sexy Men", "item": "https://matiasparfum.com/productos/carolina-herrera-212-sexy-men-100ml.html"}]}</script>
+  <script>
+  (function () {
+    var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+    var data = null;
+    for (var i = 0; i < scripts.length; i++) {
+      try {
+        var d = JSON.parse(scripts[i].textContent);
+        if (d && d['@type'] === 'Product') { data = d; break; }
+      } catch (e) {}
+    }
+    if (!data || typeof fbq !== 'function') return;
+    fbq('track', 'ViewContent', {
+      content_name: data.name,
+      content_category: (data.brand && data.brand.name) || '',
+      content_ids: [location.pathname],
+      content_type: 'product',
+      value: parseInt((data.offers && data.offers.price) || 0, 10),
+      currency: (data.offers && data.offers.priceCurrency) || 'CRC'
+    });
+  })();
+  </script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuánto cuesta el Carolina Herrera 212 Sexy Men 100ML?", "acceptedAnswer": {"@type": "Answer", "text": "El Carolina Herrera 212 Sexy Men 100ML cuesta ₡41,000 en Matías Parfum, con envío a todo Costa Rica. Consultá disponibilidad por WhatsApp."}}, {"@type": "Question", "name": "¿Es original el Carolina Herrera 212 Sexy Men 100ML?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, el Carolina Herrera 212 Sexy Men 100ML es 100% original. Trabajamos directamente con distribuidores autorizados para garantizar su autenticidad."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
