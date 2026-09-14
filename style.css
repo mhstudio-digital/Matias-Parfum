@@ -1177,3 +1177,89 @@ input,select { font-family:var(--sans) }
   color:var(--stone); font-size:14.5px; line-height:1.7;
   margin-top:12px; max-width:640px;
 }
+
+/* ══ Carrito + Favoritos: botón en cards (catálogo/home) ══════ */
+.fav-btn {
+  position:absolute; top:10px; right:10px; z-index:3;
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(10,9,8,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(201,169,110,.25); color:#fff;
+  transition:background .25s, border-color .25s, color .25s, transform .2s var(--ease);
+}
+.fav-btn:hover { border-color:var(--gold); transform:scale(1.08) }
+.fav-btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.6 }
+.fav-btn.is-fav { color:var(--gold); border-color:var(--gold) }
+.fav-btn.is-fav svg { fill:var(--gold) }
+
+/* Nav favoritos (mirror de .nav-cart-btn) */
+.nav-fav-btn {
+  position:relative;
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--stone-dim);
+  border:1px solid transparent;
+  padding:9px 18px;
+  transition:color .25s, border-color .25s, background .25s;
+}
+.nav-fav-btn:hover, .nav-fav-btn.active {
+  color:var(--gold); border-color:var(--line); background:var(--gold-dim);
+}
+.nav-fav-btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.5 }
+.nav-fav-btn.active svg { fill:var(--gold) }
+.fav-count {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:18px; height:18px;
+  background:var(--gold); color:var(--bg);
+  border-radius:9px; font-size:9px; font-weight:600; padding:0 4px;
+  opacity:0; transform:scale(0);
+  transition:opacity .2s var(--ease2), transform .2s var(--ease2);
+}
+.fav-count.show { opacity:1; transform:scale(1) }
+
+/* ══ Carrito + Favoritos: ficha de producto ══════════════════ */
+.pp-secondary-actions { display:flex; gap:10px; margin-bottom:10px }
+.pp-cart-btn {
+  flex:1;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold-line);
+  font-size:10px; letter-spacing:.24em; text-transform:uppercase; font-weight:500;
+  padding:15px 18px;
+  transition:background .25s, border-color .25s, color .25s, transform .2s var(--ease);
+}
+.pp-cart-btn:hover { background:var(--gold); color:var(--bg); border-color:var(--gold); transform:translateY(-2px) }
+.pp-cart-btn svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.5; flex-shrink:0 }
+
+.pp-fav-btn {
+  flex-shrink:0; width:52px;
+  display:flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--line); color:var(--stone-dim);
+  transition:color .25s, border-color .25s, background .25s;
+}
+.pp-fav-btn svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5 }
+.pp-fav-btn.is-fav { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
+.pp-fav-btn.is-fav svg { fill:var(--gold) }
+
+/* Íconos carrito/favoritos en topbar de ficha de producto */
+.pp-topbar-icons { display:flex; align-items:center; gap:10px }
+.pp-topbar-icon {
+  position:relative;
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--stone-dim); border:1px solid var(--line);
+  transition:color .25s, border-color .25s, background .25s;
+}
+.pp-topbar-icon:hover { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
+.pp-topbar-icon svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.5 }
+.pp-topbar-icon .cart-count, .pp-topbar-icon .fav-count { position:absolute; top:-4px; right:-4px }
+
+/* Toast de confirmación (agregado al carrito / favoritos) */
+.mp-toast {
+  position:fixed; left:50%; bottom:26px; transform:translate(-50%,16px);
+  background:var(--bg2); color:var(--cream); border:1px solid var(--gold-line);
+  padding:12px 22px; font-size:12px; letter-spacing:.04em;
+  border-radius:4px; box-shadow:0 10px 30px rgba(0,0,0,.4);
+  opacity:0; pointer-events:none; z-index:999;
+  transition:opacity .25s var(--ease2), transform .25s var(--ease2);
+}
+.mp-toast.show { opacity:1; transform:translate(-50%,0) }
