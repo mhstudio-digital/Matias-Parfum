@@ -17,7 +17,7 @@
   --gold-glow: rgba(201,169,110,.35);
   --cream:     #EDE8DF;
   --stone:     #C4B9A8;
-  --stone-dim: rgba(196,185,168,.48);
+  --stone-dim: rgba(196,185,168,.64); /* .48 no llegaba al contraste AA (3.09:1 vs 4.5:1 mínimo) en texto chico */
   --line:      rgba(201,169,110,.18);
   --wa:        #25D366;
 
