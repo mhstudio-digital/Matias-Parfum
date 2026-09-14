@@ -737,6 +737,18 @@ input,select { font-family:var(--sans) }
   .products-grid { grid-template-columns:repeat(3,1fr) }
   .quiz-result-grid { grid-template-columns:repeat(3,1fr) }
 }
+/* .nav-links está centrado de forma absoluta e independiente del ancho
+   de .nav-actions; con las etiquetas de texto completas, .nav-actions
+   es lo bastante ancho como para pisar .nav-links en casi cualquier
+   pantalla de laptop (hasta ~1476px). Pasar a solo-íconos bastante
+   antes del breakpoint mobile evita esa superposición con margen de sobra. */
+@media (max-width:1600px) {
+  .nav-cart-btn span:not(.cart-count),
+  .nav-fav-btn span:not(.fav-count),
+  .nav-compare-btn span:not(.compare-count) { display:none }
+  .nav-cart-btn, .nav-fav-btn, .nav-compare-btn { padding:9px 10px }
+  .nav-actions { gap:4px }
+}
 @media (max-width:900px) {
   .hero-text { padding:130px 20px 90px }
   .hero-h1 { max-width:100% }
@@ -749,11 +761,6 @@ input,select { font-family:var(--sans) }
   .quiz-result-grid { grid-template-columns:repeat(2,1fr) }
   .nav-links { display:none }
   .nav-hamburger { display:flex }
-  .nav-cart-btn span:not(.cart-count),
-  .nav-fav-btn span:not(.fav-count),
-  .nav-compare-btn span:not(.compare-count) { display:none }
-  .nav-cart-btn, .nav-fav-btn, .nav-compare-btn { padding:9px 10px }
-  .nav-actions { gap:4px }
 }
 @media (max-width:600px) {
   .filter-cats { gap:0; flex-wrap:wrap }
@@ -1343,3 +1350,14 @@ input,select { font-family:var(--sans) }
 }
 .pp-compare-btn svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.5 }
 .pp-compare-btn.is-compare { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
+
+/* En una fila angosta, hasta en solo-íconos, search+comparar+favoritos+
+   carrito+hamburger no entran junto al logo (se cortan fuera del viewport).
+   Comparador y Favoritos ya viven como links en .mobile-menu, así que se
+   ocultan acá y quedan solo búsqueda, carrito y el propio menú.
+   (Regla al final del archivo a propósito: .nav-compare-btn/.nav-fav-btn
+   se redefinen más abajo sin media query, y con igual especificidad gana
+   el orden de aparición, no el media query.) */
+@media (max-width:600px) {
+  .nav-compare-btn, .nav-fav-btn { display:none }
+}
