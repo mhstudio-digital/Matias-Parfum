@@ -138,6 +138,22 @@
         <label class="sidebar-check"><input type="checkbox" class="tipo-check" value="Estuches" onchange="toggleTipo(this)"><span class="check-label">Estuches</span><span class="sidebar-count">21</span></label>
       </div>
       <div class="sidebar-group">
+        <h3 class="sidebar-title">Precio</h3>
+        <div class="price-range-wrap">
+          <div class="price-input-group">
+            <span class="price-currency">₡</span>
+            <input type="number" id="precioMinInput" inputmode="numeric" placeholder="18.000" min="0" step="1000" onchange="aplicarRangoPrecio()">
+          </div>
+          <span class="price-range-sep">–</span>
+          <div class="price-input-group">
+            <span class="price-currency">₡</span>
+            <input type="number" id="precioMaxInput" inputmode="numeric" placeholder="135.000" min="0" step="1000" onchange="aplicarRangoPrecio()">
+          </div>
+        </div>
+        <button type="button" class="price-clear-btn" id="precioClearBtn" onclick="limpiarRangoPrecio()" hidden>Limpiar precio</button>
+      </div>
+
+      <div class="sidebar-group">
         <h3 class="sidebar-title">Marca</h3>
         <div class="sidebar-brand-list" id="brandList">
       <label class="sidebar-check"><input type="checkbox" class="marca-check" value="Afnan" onchange="toggleMarca(this)"><span class="check-label">Afnan</span><span class="sidebar-count">3</span></label>
@@ -6810,6 +6826,8 @@ let filtroActivo = 'todos';
 let busquedaActiva = '';
 let tiposActivos = new Set();
 let marcasActivas = new Set();
+let precioMin = null;
+let precioMax = null;
 
 function _matchCat(card, cat) {
   if (cat === 'todos') return true;
@@ -6831,6 +6849,41 @@ function _matchMarca(card, marcas) {
   return marcas.has(card.dataset.brand || '');
 }
 
+function _getPrecioNum(card) {
+  if (card.dataset.priceNum !== undefined) return parseInt(card.dataset.priceNum, 10);
+  const el = card.querySelector('.precio');
+  const raw = el ? el.textContent : '';
+  const num = parseInt(raw.replace(/[^0-9]/g, ''), 10) || 0;
+  card.dataset.priceNum = num;
+  return num;
+}
+
+function _matchPrecio(card, min, max) {
+  if (min === null && max === null) return true;
+  const p = _getPrecioNum(card);
+  if (min !== null && p < min) return false;
+  if (max !== null && p > max) return false;
+  return true;
+}
+
+function aplicarRangoPrecio() {
+  const minEl = document.getElementById('precioMinInput');
+  const maxEl = document.getElementById('precioMaxInput');
+  precioMin = minEl.value !== '' ? parseInt(minEl.value, 10) : null;
+  precioMax = maxEl.value !== '' ? parseInt(maxEl.value, 10) : null;
+  document.getElementById('precioClearBtn').hidden = (precioMin === null && precioMax === null);
+  _aplicarFiltros();
+}
+
+function limpiarRangoPrecio() {
+  document.getElementById('precioMinInput').value = '';
+  document.getElementById('precioMaxInput').value = '';
+  precioMin = null;
+  precioMax = null;
+  document.getElementById('precioClearBtn').hidden = true;
+  _aplicarFiltros();
+}
+
 function _matchBusqueda(card, q) {
   if (!q) return true;
   const hay = [card.dataset.nombre, card.dataset.brand, card.dataset.familia, card.dataset.tipo,
@@ -6842,7 +6895,7 @@ function _aplicarFiltros() {
   const cards = document.querySelectorAll('.products-grid .card');
   let visible = 0;
   cards.forEach(card => {
-    const show = _matchCat(card, filtroActivo) && _matchGenero(card, tiposActivos) && _matchMarca(card, marcasActivas) && _matchBusqueda(card, busquedaActiva);
+    const show = _matchCat(card, filtroActivo) && _matchGenero(card, tiposActivos) && _matchMarca(card, marcasActivas) && _matchBusqueda(card, busquedaActiva) && _matchPrecio(card, precioMin, precioMax);
     card.style.display = show ? '' : 'none';
     if (show) visible++;
   });
