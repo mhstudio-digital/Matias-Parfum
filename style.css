@@ -696,6 +696,36 @@ input,select { font-family:var(--sans) }
   color:var(--gold-lt); margin-top:28px; line-height:1.5;
 }
 
+/* ── MASCOTA (M) ── */
+.mascot-section {
+  max-width:var(--max); margin:0 auto;
+  padding:100px var(--pad) 120px;
+  display:grid; grid-template-columns:0.85fr 1fr;
+  gap:64px; align-items:center;
+}
+.mascot-img-wrap {
+  position:relative; display:flex; justify-content:center;
+}
+.mascot-img-wrap::before {
+  content:""; position:absolute; inset:8% 12%;
+  background:radial-gradient(ellipse at center, rgba(212,175,106,.22) 0%, transparent 70%);
+  filter:blur(30px); z-index:0;
+}
+.mascot-img-wrap img {
+  position:relative; z-index:1;
+  width:100%; max-width:340px; height:auto;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,.55));
+}
+.mascot-eyebrow { margin-bottom:20px }
+.mascot-cta {
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:28px; padding:15px 30px;
+  background:var(--gold); color:var(--bg);
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  border-radius:2px; transition:opacity .2s;
+}
+.mascot-cta:hover { opacity:.85 }
+
 /* ÔöÇÔöÇ FOOTER ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 .site-footer {
   border-top:1px solid var(--line);
@@ -755,6 +785,8 @@ input,select { font-family:var(--sans) }
   .cat-card { flex-basis:calc((100% - 24px)/2) }
   .about-section { grid-template-columns:1fr; gap:40px }
   .about-rule-v { display:none }
+  .mascot-section { grid-template-columns:1fr; gap:32px; padding:70px var(--pad) 90px; text-align:center }
+  .mascot-img-wrap img { max-width:240px }
   .footer-inner { grid-template-columns:1fr 1fr; gap:40px }
   .products-grid { grid-template-columns:repeat(2,1fr) }
   .quiz-grid { grid-template-columns:repeat(2,1fr) }
@@ -767,7 +799,7 @@ input,select { font-family:var(--sans) }
   .filter-cat { padding:7px 10px; font-size:9px; letter-spacing:.14em }
   .filter-search-wrap { display:none }
   .hero-scrim { background:linear-gradient(180deg, rgba(6,5,4,.55) 0%, rgba(6,5,4,.88) 55%, rgba(6,5,4,.96) 100%) }
-  .hero-bg { object-position:70% center }
+  .hero-bg { object-position:78% center }
   .hero-text { padding:110px 20px 60px }
   .hero-sub { max-width:100% }
   .categorias-grid { gap:16px }
