@@ -799,7 +799,7 @@ input,select { font-family:var(--sans) }
   .filter-cat { padding:7px 10px; font-size:9px; letter-spacing:.14em }
   .filter-search-wrap { display:none }
   .hero-scrim { background:linear-gradient(180deg, rgba(6,5,4,.55) 0%, rgba(6,5,4,.88) 55%, rgba(6,5,4,.96) 100%) }
-  .hero-bg { object-position:78% center }
+  .hero-bg { object-position:70% center }
   .hero-text { padding:110px 20px 60px }
   .hero-sub { max-width:100% }
   .categorias-grid { gap:16px }
