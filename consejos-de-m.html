@@ -61,28 +61,84 @@
       position:relative; z-index:1; width:100%; max-width:280px; height:auto;
       filter:drop-shadow(0 16px 32px rgba(0,0,0,.55));
     }
-    .tip-list { display:flex; flex-direction:column; gap:0; margin-top:8px }
-    .tip-item {
-      border-top:1px solid var(--line); padding:26px 0;
+    /* ── filtros ── */
+    .tips-toolbar {
+      max-width:var(--max); margin:0 auto; padding:0 var(--pad);
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      gap:16px; margin-bottom:36px;
     }
-    .tip-item:last-child { border-bottom:1px solid var(--line) }
+    .tips-filter { display:flex; flex-wrap:wrap; gap:8px }
+    .tip-filter-btn {
+      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+      color:rgba(196,185,168,.55); padding:9px 16px;
+      border:1px solid var(--line); border-radius:100px;
+      transition:color .2s, border-color .2s, background .2s;
+      background:transparent;
+    }
+    .tip-filter-btn:hover { color:var(--stone) }
+    .tip-filter-btn.active { color:var(--gold); border-color:var(--gold-line); background:var(--gold-dim) }
+    .tip-random-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--bg); background:var(--gold); padding:11px 20px;
+      border-radius:100px; transition:opacity .2s, transform .2s;
+      white-space:nowrap;
+    }
+    .tip-random-btn:hover { opacity:.85; transform:translateY(-1px) }
+    .tip-random-btn svg { width:14px; height:14px; flex-shrink:0 }
+
+    /* ── grid de tarjetas ── */
+    .tip-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px }
+    .tip-card {
+      border:1px solid var(--line); border-radius:4px; background:var(--bg2);
+      overflow:hidden; transition:border-color .25s, transform .2s, box-shadow .25s;
+      opacity:0; transform:translateY(16px);
+    }
+    .tip-card.revealed { opacity:1; transform:none; transition:opacity .6s ease, transform .6s ease }
+    .tip-card:hover { border-color:var(--gold-line); transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.35) }
+    .tip-card.flash { border-color:var(--gold); box-shadow:0 0 0 1px var(--gold), 0 16px 32px rgba(212,175,106,.18) }
+    .tip-card-toggle {
+      width:100%; display:flex; align-items:center; gap:16px;
+      padding:22px 22px; text-align:left; cursor:pointer;
+    }
+    .tip-icon {
+      flex-shrink:0; width:38px; height:38px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--gold-dim); color:var(--gold);
+      transition:background .25s, color .25s;
+    }
+    .tip-icon svg { width:18px; height:18px }
+    .tip-card[open-state="true"] .tip-icon { background:var(--gold); color:var(--bg) }
+    .tip-card-head-text { flex:1; min-width:0 }
     .tip-num {
-      font-family:var(--serif); font-size:13px; color:var(--gold);
-      letter-spacing:.1em; display:block; margin-bottom:8px;
+      font-size:9px; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--gold); display:block; margin-bottom:6px;
     }
-    .tip-item h3 {
-      font-family:var(--serif); font-size:22px; font-weight:400;
-      color:var(--cream); margin-bottom:10px; line-height:1.3;
+    .tip-card h3 {
+      font-family:var(--serif); font-size:18px; font-weight:400;
+      color:var(--cream); line-height:1.35;
     }
-    .tip-item p { font-size:14px; color:var(--stone-dim); line-height:1.85 }
+    .tip-chevron {
+      flex-shrink:0; width:26px; height:26px; border-radius:50%;
+      border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+      color:var(--gold); font-size:15px; line-height:1; transition:transform .3s, border-color .3s;
+    }
+    .tip-card[open-state="true"] .tip-chevron { transform:rotate(45deg); border-color:var(--gold-line) }
+    .tip-card-body { max-height:0; overflow:hidden; transition:max-height .35s ease }
+    .tip-card-body-inner { padding:0 22px 24px 76px }
+    .tip-card-body p { font-size:13.5px; color:var(--stone-dim); line-height:1.85 }
+
     .m-tips-cta {
-      max-width:var(--max); margin:12px auto 0; padding:0 var(--pad) 80px;
+      max-width:var(--max); margin:32px auto 0; padding:0 var(--pad) 80px;
       text-align:center;
     }
     .m-tips-cta p { font-size:14px; color:var(--stone-dim); margin-bottom:20px }
     @media (max-width:900px) {
       .m-tips-hero { grid-template-columns:1fr; gap:28px; text-align:center; padding-top:40px }
       .m-tips-hero-img img { max-width:200px }
+      .tip-grid { grid-template-columns:1fr }
+      .tips-toolbar { flex-direction:column; align-items:stretch }
+      .tip-card-body-inner { padding:0 18px 22px 18px }
     }
   </style>
 </head>
@@ -120,48 +176,151 @@
 </section>
 
 <section class="pp-faq-section" style="padding-top:20px">
-  <div class="tip-list">
-    <div class="tip-item">
-      <span class="tip-num">01</span>
-      <h3>Elegí según tu personalidad, no según la tendencia</h3>
-      <p>Un perfume amaderado y ambarado habla de presencia y seguridad; uno fresco y cítrico, de energía y espontaneidad; uno oriental y especiado, de misterio. Antes de mirar la marca, pensá qué querés transmitir. M siempre dice: el mejor perfume es el que se siente tuyo, no el que está de moda.</p>
+  <div class="tips-toolbar">
+    <div class="tips-filter" role="tablist" aria-label="Filtrar consejos por tema">
+      <button class="tip-filter-btn active" data-filter="todos">Todos</button>
+      <button class="tip-filter-btn" data-filter="elegir">Elegir</button>
+      <button class="tip-filter-btn" data-filter="aplicar">Aplicar</button>
+      <button class="tip-filter-btn" data-filter="conservar">Conservar</button>
+      <button class="tip-filter-btn" data-filter="autenticidad">Autenticidad</button>
     </div>
-    <div class="tip-item">
-      <span class="tip-num">02</span>
-      <h3>EDT vs. EDP: la diferencia real</h3>
-      <p>El Eau de Toilette (EDT) tiene menor concentración de esencia — es más ligero y dura entre 4 y 6 horas, ideal para el día. El Eau de Parfum (EDP) concentra más esencia, dura de 6 a 10 horas y proyecta más. Si dudás cuál llevar, EDP es la apuesta segura para casi cualquier ocasión.</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">03</span>
-      <h3>Aplicalo en los puntos de pulso, no en el aire</h3>
-      <p>Muñecas, cuello, detrás de las orejas y el pliegue del codo son zonas donde el calor del cuerpo libera el aroma poco a poco durante el día. Rociarlo "al aire" y caminar a través de la nube solo desperdicia producto — aplicá directo sobre la piel, sin frotar las muñecas entre sí (eso rompe las moléculas del perfume).</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">04</span>
-      <h3>Guardalo lejos de la luz y el calor</h3>
-      <p>El baño y el carro son los peores lugares para un perfume: la humedad, la luz y los cambios de temperatura degradan la fórmula y le cambian el aroma con el tiempo. Guardá tus frascos en un cajón o repisa fresca, lejos del sol directo — así te duran años sin perder su carácter.</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">05</span>
-      <h3>Tené al menos dos: uno de día, uno de noche</h3>
-      <p>Un fresco/cítrico o acuático para el día y la oficina, y uno amaderado, oriental o especiado para la noche o una ocasión especial. Rotar entre dos o tres fragancias según el momento del día te hace lucir más intencional que usar siempre el mismo frasco.</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">06</span>
-      <h3>El "layering" (combinar perfumes) sí funciona, con cuidado</h3>
-      <p>Combinar una fragancia ligera de base (cítrica o acuática) con una más intensa encima (amaderada o ambarada) puede crear algo único y personal. La clave es no mezclar más de dos, y probar primero en la piel un par de horas antes de salir — algunos acordes chocan entre sí.</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">07</span>
-      <h3>Menos es más: 2 o 3 rociadas alcanzan</h3>
-      <p>Un error común es rociar de más pensando que así dura más — en realidad, satura el olfato propio y puede resultar invasivo para los demás. Con 2 o 3 aplicaciones en puntos de pulso alcanza para proyectar bien durante horas.</p>
-    </div>
-    <div class="tip-item">
-      <span class="tip-num">08</span>
-      <h3>Cómo saber que es 100&nbsp;% original</h3>
-      <p>El frasco, el sello, la caja y el aroma deben coincidir exactamente con la presentación oficial de la marca — sin etiquetas torcidas, tapas genéricas ni olores "parecidos". En Matías Parfum trabajamos directo con distribuidores autorizados, así que cada botella que sale de acá cumple ese estándar.</p>
-    </div>
+    <button class="tip-random-btn" id="randomTipBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+      Consejo al azar
+    </button>
   </div>
+
+  <div class="tip-grid" id="tipGrid">
+    <article class="tip-card" data-cat="elegir">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">01 · Elegir</span>
+          <h3>Elegí según tu personalidad, no según la tendencia</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>Un perfume amaderado y ambarado habla de presencia y seguridad; uno fresco y cítrico, de energía y espontaneidad; uno oriental y especiado, de misterio. Antes de mirar la marca, pensá qué querés transmitir. M siempre dice: el mejor perfume es el que se siente tuyo, no el que está de moda.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="elegir">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">02 · Elegir</span>
+          <h3>EDT vs. EDP: la diferencia real</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>El Eau de Toilette (EDT) tiene menor concentración de esencia — es más ligero y dura entre 4 y 6 horas, ideal para el día. El Eau de Parfum (EDP) concentra más esencia, dura de 6 a 10 horas y proyecta más. Si dudás cuál llevar, EDP es la apuesta segura para casi cualquier ocasión.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="aplicar">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2s7 7.5 7 12a7 7 0 11-14 0c0-4.5 7-12 7-12z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">03 · Aplicar</span>
+          <h3>Aplicalo en los puntos de pulso, no en el aire</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>Muñecas, cuello, detrás de las orejas y el pliegue del codo son zonas donde el calor del cuerpo libera el aroma poco a poco durante el día. Rociarlo "al aire" y caminar a través de la nube solo desperdicia producto — aplicá directo sobre la piel, sin frotar las muñecas entre sí (eso rompe las moléculas del perfume).</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="conservar">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">04 · Conservar</span>
+          <h3>Guardalo lejos de la luz y el calor</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>El baño y el carro son los peores lugares para un perfume: la humedad, la luz y los cambios de temperatura degradan la fórmula y le cambian el aroma con el tiempo. Guardá tus frascos en un cajón o repisa fresca, lejos del sol directo — así te duran años sin perder su carácter.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="elegir">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">05 · Elegir</span>
+          <h3>Tené al menos dos: uno de día, uno de noche</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>Un fresco/cítrico o acuático para el día y la oficina, y uno amaderado, oriental o especiado para la noche o una ocasión especial. Rotar entre dos o tres fragancias según el momento del día te hace lucir más intencional que usar siempre el mismo frasco.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="aplicar">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2s7 7.5 7 12a7 7 0 11-14 0c0-4.5 7-12 7-12z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">06 · Aplicar</span>
+          <h3>El "layering" sí funciona, con cuidado</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>Combinar una fragancia ligera de base (cítrica o acuática) con una más intensa encima (amaderada o ambarada) puede crear algo único y personal. La clave es no mezclar más de dos, y probar primero en la piel un par de horas antes de salir — algunos acordes chocan entre sí.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="aplicar">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2s7 7.5 7 12a7 7 0 11-14 0c0-4.5 7-12 7-12z"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">07 · Aplicar</span>
+          <h3>Menos es más: 2 o 3 rociadas alcanzan</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>Un error común es rociar de más pensando que así dura más — en realidad, satura el olfato propio y puede resultar invasivo para los demás. Con 2 o 3 aplicaciones en puntos de pulso alcanza para proyectar bien durante horas.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="tip-card" data-cat="autenticidad">
+      <button class="tip-card-toggle" aria-expanded="false">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5"/></svg></span>
+        <span class="tip-card-head-text">
+          <span class="tip-num">08 · Autenticidad</span>
+          <h3>Cómo saber que es 100&nbsp;% original</h3>
+        </span>
+        <span class="tip-chevron" aria-hidden="true">+</span>
+      </button>
+      <div class="tip-card-body">
+        <div class="tip-card-body-inner">
+          <p>El frasco, el sello, la caja y el aroma deben coincidir exactamente con la presentación oficial de la marca — sin etiquetas torcidas, tapas genéricas ni olores "parecidos". En Matías Parfum trabajamos directo con distribuidores autorizados, así que cada botella que sale de acá cumple ese estándar.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <p class="tips-empty" id="tipsEmpty" style="display:none; text-align:center; color:var(--stone-dim); font-size:14px; margin-top:24px">No hay consejos en esta categoría todavía.</p>
 </section>
 
 <div class="m-tips-cta">
@@ -220,6 +379,78 @@
     <p>Perfumes 100&nbsp;% originales y garantizados</p>
   </div>
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = Array.from(document.querySelectorAll('.tip-card'));
+  const filterBtns = Array.from(document.querySelectorAll('.tip-filter-btn'));
+  const emptyMsg = document.getElementById('tipsEmpty');
+
+  function closeCard(card) {
+    const toggle = card.querySelector('.tip-card-toggle');
+    const body = card.querySelector('.tip-card-body');
+    card.removeAttribute('open-state');
+    toggle.setAttribute('aria-expanded', 'false');
+    body.style.maxHeight = null;
+  }
+  function openCard(card) {
+    const toggle = card.querySelector('.tip-card-toggle');
+    const body = card.querySelector('.tip-card-body');
+    card.setAttribute('open-state', 'true');
+    toggle.setAttribute('aria-expanded', 'true');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+
+  cards.forEach(card => {
+    card.querySelector('.tip-card-toggle').addEventListener('click', () => {
+      const isOpen = card.getAttribute('open-state') === 'true';
+      isOpen ? closeCard(card) : openCard(card);
+    });
+  });
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const match = f === 'todos' || card.dataset.cat === f;
+        card.style.display = match ? '' : 'none';
+        if (!match) closeCard(card);
+        if (match) visibleCount++;
+      });
+      emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+  });
+
+  const randomBtn = document.getElementById('randomTipBtn');
+  if (randomBtn) {
+    randomBtn.addEventListener('click', () => {
+      const visible = cards.filter(c => c.style.display !== 'none');
+      if (!visible.length) return;
+      const pick = visible[Math.floor(Math.random() * visible.length)];
+      cards.forEach(c => { if (c !== pick) closeCard(c); });
+      openCard(pick);
+      pick.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      pick.classList.add('flash');
+      setTimeout(() => pick.classList.remove('flash'), 1400);
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    cards.forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 0.06 + 's';
+      io.observe(el);
+    });
+  } else {
+    cards.forEach(el => el.classList.add('revealed'));
+  }
+});
+</script>
 
 </body>
 </html>
