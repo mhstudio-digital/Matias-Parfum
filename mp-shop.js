@@ -280,7 +280,34 @@
     toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2200);
   };
 
+  // Barra fija de compra (solo móvil, vía CSS): aparece cuando el botón
+  // "Agregar al carrito" de la ficha sale de la pantalla y delega en él.
+  function initStickyBuyBar() {
+    var btn = document.getElementById('btnAddCart');
+    var total = document.getElementById('totalDisplay') || document.getElementById('priceDisplay');
+    if (!btn || !total || document.getElementById('mpBuyBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'mp-buybar';
+    bar.id = 'mpBuyBar';
+    bar.innerHTML = '<div class="mp-buybar-price"><span class="mp-buybar-lbl">Total</span><span class="mp-buybar-val"></span></div>' +
+      '<button type="button" class="mp-buybar-btn">Agregar al carrito</button>';
+    document.body.appendChild(bar);
+    var val = bar.querySelector('.mp-buybar-val');
+    function sync() { val.textContent = total.textContent; }
+    sync();
+    new MutationObserver(sync).observe(total, { childList: true, characterData: true, subtree: true });
+    bar.querySelector('.mp-buybar-btn').addEventListener('click', function () { btn.click(); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting;
+        bar.classList.toggle('show', !visible);
+        document.body.classList.toggle('has-buybar', !visible);
+      }, { threshold: 0 }).observe(btn);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    initStickyBuyBar();
     syncFavUI();
     syncCartBadges();
     syncCompareUI();

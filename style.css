@@ -1501,3 +1501,28 @@ input,select { font-family:var(--sans) }
   .filter-sep { display:none }
   .filter-count-badge { padding:2px 0 8px; border-left:0; margin-left:0 }
 }
+
+/* ── Barra fija de compra en fichas de producto (móvil) ── */
+.mp-buybar { display:none }
+@media (max-width:700px) {
+  .mp-buybar {
+    display:flex; align-items:center; gap:14px;
+    position:fixed; left:0; right:0; bottom:0; z-index:300;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(12,11,9,.97);
+    -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+    border-top:1px solid var(--gold-line);
+    transform:translateY(100%); visibility:hidden;
+    transition:transform .25s ease, visibility 0s linear .25s;
+  }
+  .mp-buybar.show { transform:none; visibility:visible; transition-delay:0s }
+  .mp-buybar-price { display:flex; flex-direction:column; line-height:1.1 }
+  .mp-buybar-lbl { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--stone-dim) }
+  .mp-buybar-val { font-family:var(--serif); font-size:22px; color:var(--gold-lt) }
+  .mp-buybar-btn {
+    flex:1; min-height:48px; background:var(--gold); color:var(--bg);
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  }
+  body.has-buybar .wa-float { bottom:calc(82px + env(safe-area-inset-bottom)) }
+  body.has-buybar .mp-toast { bottom:calc(92px + env(safe-area-inset-bottom)) }
+}
