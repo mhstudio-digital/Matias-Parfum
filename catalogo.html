@@ -159,8 +159,13 @@
 <!-- ══ CATÁLOGO ══════════════════════════════════════════════ -->
 <section class="catalog-section" id="catalogo" aria-labelledby="catalog-heading">
   <h2 id="catalog-heading" class="visually-hidden">Catálogo de fragancias</h2>
+  <button type="button" class="filters-toggle" id="filtersToggle" aria-expanded="false" aria-controls="catalogSidebar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="8" cy="17" r="2" fill="currentColor"/></svg>
+    <span>Filtros</span>
+    <span class="filters-toggle-chevron" aria-hidden="true">+</span>
+  </button>
   <div class="catalog-layout">
-    <aside class="catalog-sidebar" aria-label="Filtros de catálogo">
+    <aside class="catalog-sidebar" id="catalogSidebar" aria-label="Filtros de catálogo">
       <div class="sidebar-group">
         <h3 class="sidebar-title">Tipo</h3>
         <label class="sidebar-check"><input type="checkbox" class="tipo-check" value="Hombre" onchange="toggleTipo(this)"><span class="check-label">Hombre</span><span class="sidebar-count">133</span></label>
@@ -237,6 +242,7 @@
         </div>
         <button type="button" class="sidebar-showall" id="showAllBrandsBtn" onclick="toggleAllBrands()">Mostrar todas (49)</button>
       </div>
+      <button type="button" class="sidebar-apply" id="sidebarApply">Ver resultados</button>
     </aside>
     <div class="catalog-main">
   <div class="products-grid" id="productsGrid" role="list">
@@ -7197,6 +7203,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script>
+(function(){
+  var t=document.getElementById('filtersToggle'), sb=document.getElementById('catalogSidebar'), ap=document.getElementById('sidebarApply');
+  if(!t||!sb) return;
+  function setOpen(o){
+    sb.classList.toggle('open',o);
+    t.setAttribute('aria-expanded',o?'true':'false');
+    t.classList.toggle('is-open',o);
+  }
+  t.addEventListener('click',function(){ setOpen(!sb.classList.contains('open')); });
+  if(ap) ap.addEventListener('click',function(){
+    setOpen(false);
+    var g=document.getElementById('productsGrid');
+    if(g) window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY-140,behavior:'smooth'});
+  });
+})();
+</script>
 <script src="/mp-shop.js" defer></script>
 <script src="/search.js" defer></script>
 </body>

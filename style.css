@@ -1413,3 +1413,91 @@ input,select { font-family:var(--sans) }
   background:var(--gold-dim); color:var(--gold-lt); border:1px dashed var(--gold-line);
   padding:1px 6px; border-radius:3px; font-size:13px;
 }
+
+/* ── MOBILE POLISH ─────────────────────────────────────────── */
+@media (max-width:600px) {
+  html { scroll-padding-top:72px }
+  input, select, textarea { font-size:16px }
+
+  /* Hero: la foto se ve arriba y el texto queda abajo */
+  .hero { display:flex; align-items:flex-end }
+  .hero-bg { object-position:72% center }
+  .hero-scrim { background:linear-gradient(180deg, rgba(6,5,4,.3) 0%, rgba(6,5,4,.25) 28%, rgba(6,5,4,.88) 60%, rgba(6,5,4,.97) 100%) }
+  .hero-text { width:100%; padding:96px 20px 44px }
+
+  /* Categorías: carrusel horizontal en vez de tarjetas apiladas */
+  .categorias-grid {
+    flex-wrap:nowrap; justify-content:flex-start; gap:12px;
+    overflow-x:auto; scroll-snap-type:x mandatory;
+    margin:0 -20px; padding:0 20px 6px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .categorias-grid::-webkit-scrollbar { display:none }
+  .cat-card { flex:0 0 74%; scroll-snap-align:center }
+
+  /* Tarjetas de producto más compactas y legibles */
+  .card-image-wrap { aspect-ratio:1/1 }
+  .card-image-wrap img { padding:10px }
+  .card-body { padding:12px 12px 14px }
+  .card-brand { font-size:10px; letter-spacing:.2em }
+  .card-title { font-size:15px }
+  .card-familia { font-size:10px }
+  .precio { font-size:20px; margin-bottom:10px }
+  .add-cart-btn, .consultar-btn {
+    font-size:10px; letter-spacing:.1em; line-height:1.25;
+    min-height:42px; padding:8px 6px;
+  }
+  .consultar-btn { color:rgba(196,185,168,.6) }
+
+  /* Zonas táctiles de al menos ~44px */
+  .nav-hamburger { padding:14px 10px; margin-left:0 }
+  .nav-search-btn, .nav-cart-btn { min-height:44px }
+  .fav-btn, .compare-btn { width:40px; height:40px }
+  .footer-links { gap:2px }
+  .footer-links a, .footer-links button { padding:11px 0 }
+
+  /* Textos pequeños */
+  .section-eye, .footer-col-title { font-size:10.5px }
+}
+
+/* ── Catálogo móvil: filtros plegables ── */
+.filters-toggle, .sidebar-apply { display:none }
+@media (max-width:900px) {
+  .filters-toggle {
+    display:flex; align-items:center; gap:10px; width:100%;
+    min-height:48px; padding:0 16px; margin-bottom:16px;
+    border:1px solid var(--line); background:var(--bg2);
+    color:var(--stone); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .filters-toggle svg { width:18px; height:18px; stroke:var(--gold); fill:none; stroke-width:1.6 }
+  .filters-toggle span:nth-child(2) { flex:1; text-align:left }
+  .filters-toggle-chevron { color:var(--gold); font-size:18px; line-height:1; transition:transform .25s }
+  .filters-toggle.is-open { border-color:var(--gold-line); color:var(--gold) }
+  .filters-toggle.is-open .filters-toggle-chevron { transform:rotate(45deg) }
+  .catalog-layout { gap:0 }
+  .catalog-sidebar { display:none }
+  .catalog-sidebar.open {
+    display:block; max-height:70vh; overflow-y:auto; margin-bottom:20px;
+    padding:18px 16px 0; border:1px solid var(--line); background:var(--bg2);
+  }
+  .sidebar-apply {
+    display:block; position:sticky; bottom:0; width:calc(100% + 32px); margin:8px -16px 0;
+    min-height:48px; background:var(--gold); color:var(--bg);
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .sidebar-check { padding:10px 0 }
+  .sidebar-check input[type="checkbox"] { width:20px; height:20px }
+}
+
+/* ── Barra de categorías en una sola fila deslizable (móvil) ── */
+@media (max-width:600px) {
+  .filter-inner { flex-wrap:wrap; min-height:0; padding:6px 0 }
+  .filter-cats {
+    flex:1 1 100%; flex-wrap:nowrap; overflow-x:auto; gap:4px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .filter-cats::-webkit-scrollbar { display:none }
+  .filter-cat { flex:0 0 auto; white-space:nowrap; padding:11px 14px; font-size:10px }
+  .filter-sep { display:none }
+  .filter-count-badge { padding:2px 0 8px; border-left:0; margin-left:0 }
+}
