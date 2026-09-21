@@ -178,7 +178,7 @@
   const PRICE = parseInt(document.getElementById('priceDisplay').dataset.price, 10);
   let qty = 1;
 
-  function fmt(v) { return '₡' + v.toLocaleString('es-CR'); }
+  function fmt(v) { return '₡' + String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 
   function render() {
     document.getElementById('qtyNum').textContent      = qty;
