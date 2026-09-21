@@ -28,7 +28,7 @@
   <meta property="og:description" content="Muy pronto: decants de perfumes originales para probar antes de comprar." />
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://matiasparfum.com/decants.html" />
-  <meta property="og:image"       content="https://matiasparfum.com/img/og-image.webp" />
+  <meta property="og:image"       content="https://matiasparfum.com/img/decants-m.webp" />
   <meta name="twitter:card"       content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -45,24 +45,19 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
 
   <style>
-    .soon {
-      max-width:var(--max); margin:0 auto; padding:56px var(--pad) 90px;
-      display:grid; grid-template-columns:0.9fr 1fr; gap:56px; align-items:center;
-    }
-    .soon-img { position:relative; border:1px solid var(--line); background:#0a0908; overflow:hidden }
-    .soon-img img { display:block; width:100%; height:auto; aspect-ratio:1/1; object-fit:cover }
-    .soon-badge {
-      position:absolute; top:18px; left:18px; padding:8px 14px;
-      background:rgba(12,11,9,.9); border:1px solid var(--gold-line);
-      color:var(--gold); font-size:10px; letter-spacing:.24em; text-transform:uppercase;
-    }
+    .soon { max-width:var(--max); margin:0 auto; padding:40px var(--pad) 90px }
+    .soon .pp-bread { margin-bottom:22px }
+    .soon-banner { border:1px solid var(--line); background:#0a0908; overflow:hidden; margin-bottom:44px }
+    .soon-banner img { display:block; width:100%; height:auto }
+    .soon-copy { max-width:720px }
     .soon-points { list-style:none; margin:26px 0 30px; display:flex; flex-direction:column; gap:12px }
     .soon-points li { font-size:14px; color:var(--stone-dim); line-height:1.7; padding-left:22px; position:relative }
     .soon-points li::before { content:""; position:absolute; left:0; top:.7em; width:10px; height:1px; background:var(--gold) }
     .soon-actions { display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px }
     .soon-actions .pp-back { margin:0 }
     @media (max-width:900px) {
-      .soon { grid-template-columns:1fr; gap:32px; padding-top:40px; padding-bottom:64px }
+      .soon { padding-top:28px; padding-bottom:64px }
+      .soon-banner { margin:0 calc(var(--pad) * -1) 32px; border-left:0; border-right:0 }
       .soon-actions { flex-direction:column; align-items:stretch; text-align:center }
       .soon-actions .mascot-cta { justify-content:center }
     }
@@ -87,16 +82,20 @@
 
 <main>
 <section class="soon" aria-labelledby="soon-heading">
-  <div class="soon-img">
-    <img src="/img/decants%20portada.webp" alt="Decants de perfumes originales - Matías Parfum" width="800" height="800" loading="eager">
-    <span class="soon-badge">Próximamente</span>
+  <nav class="pp-bread" aria-label="Ruta de navegación">
+    <a href="/index.html">Inicio</a>
+    <span class="sep" aria-hidden="true">/</span>
+    <span>Decants</span>
+  </nav>
+
+  <div class="soon-banner">
+    <picture>
+      <source media="(max-width:700px)" srcset="/img/decants-m-mobile.webp" width="819" height="1024">
+      <img src="/img/decants-m.webp" alt="M, la mascota de Matías Parfum, llenando viales de decants con un gotero. Cartel: Próximamente, decants." width="1536" height="864" loading="eager">
+    </picture>
   </div>
-  <div>
-    <nav class="pp-bread" aria-label="Ruta de navegación" style="margin-bottom:20px">
-      <a href="/index.html">Inicio</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <span>Decants</span>
-    </nav>
+
+  <div class="soon-copy">
     <p class="section-eye">Muy pronto</p>
     <h1 class="section-h" id="soon-heading">Decants, <em>próximamente</em>.</h1>
     <p class="section-sub" style="margin-bottom:0">Estamos preparando una selección de decants: presentaciones pequeñas de perfumes 100&nbsp;% originales para que pruebes una fragancia antes de decidirte por el frasco completo.</p>
