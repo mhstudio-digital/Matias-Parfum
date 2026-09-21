@@ -222,26 +222,34 @@ input,select { font-family:var(--sans) }
   font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--stone); white-space:nowrap;
 }
-.trust-dup { display:none }
+@media (max-width:700px) {
+  .trust-strip { padding:22px 20px }
+  .trust-strip-inner { justify-content:flex-start; gap:18px 28px }
+  .trust-item span { white-space:normal }
+}
+
+/* Franja de garantías en movimiento: la activa el JS de index.html (.is-marquee) */
 @keyframes trust-marquee { from { transform:translateX(0) } to { transform:translateX(-50%) } }
-/* Pantallas donde los 4 textos no caben en una línea: cinta que se desliza */
-@media (max-width:960px) {
-  .trust-strip { padding:16px 0; overflow:hidden }
-  .trust-strip-inner {
-    max-width:none; margin:0; width:max-content;
-    flex-wrap:nowrap; justify-content:flex-start; gap:0;
-    animation:trust-marquee 24s linear infinite;
-  }
-  .trust-strip:active .trust-strip-inner { animation-play-state:paused }
-  .trust-item { flex:0 0 auto; padding:0 24px }
-  .trust-item span { white-space:nowrap }
-  .trust-dup { display:flex }
+.trust-strip.is-marquee {
+  overflow:hidden; padding:20px 0;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+          mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
 }
-@media (max-width:960px) and (prefers-reduced-motion:reduce) {
-  .trust-strip { overflow-x:auto }
-  .trust-strip-inner { animation:none }
-  .trust-dup { display:none }
+.trust-strip.is-marquee .trust-strip-inner {
+  max-width:none; margin:0; width:max-content;
+  flex-wrap:nowrap; justify-content:flex-start; gap:0;
+  animation:trust-marquee var(--trust-dur, 30s) linear infinite;
+  will-change:transform;
 }
+.trust-strip.is-marquee:hover .trust-strip-inner,
+.trust-strip.is-marquee:active .trust-strip-inner { animation-play-state:paused }
+.trust-strip.is-marquee .trust-item { flex:0 0 auto; padding:0 30px; position:relative }
+.trust-strip.is-marquee .trust-item::after {
+  content:""; position:absolute; right:-2px; top:50%;
+  width:3px; height:3px; border-radius:50%; background:var(--gold-line); transform:translateY(-50%);
+}
+.trust-strip.is-marquee .trust-item span { white-space:nowrap }
+
 
 /* ── CATEGORIAS ────────────────────────────────────────── */
 .categorias-section {
