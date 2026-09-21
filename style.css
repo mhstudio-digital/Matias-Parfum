@@ -222,10 +222,25 @@ input,select { font-family:var(--sans) }
   font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--stone); white-space:nowrap;
 }
-@media (max-width:700px) {
-  .trust-strip { padding:22px 20px }
-  .trust-strip-inner { justify-content:flex-start; gap:18px 28px }
-  .trust-item span { white-space:normal }
+.trust-dup { display:none }
+@keyframes trust-marquee { from { transform:translateX(0) } to { transform:translateX(-50%) } }
+/* Pantallas donde los 4 textos no caben en una línea: cinta que se desliza */
+@media (max-width:960px) {
+  .trust-strip { padding:16px 0; overflow:hidden }
+  .trust-strip-inner {
+    max-width:none; margin:0; width:max-content;
+    flex-wrap:nowrap; justify-content:flex-start; gap:0;
+    animation:trust-marquee 24s linear infinite;
+  }
+  .trust-strip:active .trust-strip-inner { animation-play-state:paused }
+  .trust-item { flex:0 0 auto; padding:0 24px }
+  .trust-item span { white-space:nowrap }
+  .trust-dup { display:flex }
+}
+@media (max-width:960px) and (prefers-reduced-motion:reduce) {
+  .trust-strip { overflow-x:auto }
+  .trust-strip-inner { animation:none }
+  .trust-dup { display:none }
 }
 
 /* ── CATEGORIAS ────────────────────────────────────────── */
