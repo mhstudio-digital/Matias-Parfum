@@ -334,5 +334,11 @@
     "publishedAt": "2026-10-30T19:52:10.854Z",
     "metricoolPostId": "draft-emailed",
     "status": "published"
+  },
+  {
+    "slug": "bharara-double-bleu-100ml-edp",
+    "publishedAt": "2026-10-31T19:08:43.923Z",
+    "metricoolPostId": "draft-emailed",
+    "status": "published"
   }
 ]
